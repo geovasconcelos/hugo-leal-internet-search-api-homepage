@@ -1,0 +1,17 @@
+{
+  "name": "internet-search-api-homepage",
+  "version": "1.0.0",
+  "description": "Homepage profissional para Internet Search API - Serviço de Busca Gerenciada",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx --yes serve -s . -l $PORT"
+  },
+  "keywords": [
+    "search-api",
+    "information-service",
+    "managed-search",
+    "homepage"
+  ],
+  "author": "George",
+  "license": "MIT"
+}

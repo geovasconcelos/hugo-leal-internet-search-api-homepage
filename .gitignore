@@ -1,0 +1,43 @@
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Railway
+.railway/
+
+# Sandbox environment junk (never commit these)
+.cache/
+.npm/
+.npm-global/
+.config/
+.local/
+.npmrc
+.wget-hsts

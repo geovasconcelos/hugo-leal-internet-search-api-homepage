@@ -1,0 +1,110 @@
+================================================================================
+        GUIA RÁPIDO: Do GitHub ao Railway em 5 Minutos
+================================================================================
+
+PASSO 1: PREPARAR O REPOSITÓRIO LOCAL
+────────────────────────────────────────────────────────────────────────────
+  $ git init
+  $ git add .
+  $ git commit -m "Initial commit: Internet Search API homepage"
+
+
+PASSO 2: CRIAR REPOSITÓRIO NO GITHUB (COM SEU NOME)
+────────────────────────────────────────────────────────────────────────────
+  1. Aceda a https://github.com/new
+  2. Nome: hugo-leal-internet-search-api-homepage
+     (Isso fará a URL incluir "hugo-leal")
+  3. Descrição: Homepage profissional para Internet Search API
+  4. Escolha Public (para que Railway consiga aceder)
+  5. Clique "Create repository"
+
+
+PASSO 3: FAZER PUSH PARA GITHUB
+────────────────────────────────────────────────────────────────────────────
+  $ git remote add origin https://github.com/SEU-USUARIO/internet-search-api-homepage.git
+  $ git branch -M main
+  $ git push -u origin main
+
+  ✓ Repositório agora visível em GitHub
+
+
+PASSO 4: CONECTAR A RAILWAY
+────────────────────────────────────────────────────────────────────────────
+  1. Aceda a https://railway.app (crie conta se necessário)
+  2. Clique "Create New Project"
+  3. Clique "Deploy from GitHub repo"
+  4. Autorize Railway a aceder ao GitHub (se pedido)
+  5. Selecione "internet-search-api-homepage"
+  6. Railway detectará automaticamente a configuração
+  7. Clique "Deploy"
+
+
+PASSO 5: PERSONALIZAR NOME NO RAILWAY (COM SEU NOME)
+────────────────────────────────────────────────────────────────────────────
+  1. No dashboard do Railway, clique no seu projeto
+  2. Vá a "Service" ou "Settings"
+  3. Procure "Service Name"
+  4. Altere para: hugo-leal-search-api
+  5. Salve alterações
+
+  ✓ URL será atualizada para incluir "hugo-leal"
+
+
+PASSO 6: ACEDER À HOMEPAGE
+────────────────────────────────────────────────────────────────────────────
+  ✓ Deploy concluído em ~2-3 minutos
+  ✓ URL será algo como:
+    https://hugo-leal-search-api-production.up.railway.app
+
+  Copie este URL e teste no navegador!
+
+
+================================================================================
+                          PERSONALIZAÇÕES RÁPIDAS
+================================================================================
+
+Alterar Cores:
+  Edite o ficheiro index.html
+  Procure por :root { no <style>
+  Modifique os valores de cor (ex: --primary: #2563eb)
+
+Alterar Email de Contacto:
+  Edite o ficheiro index.html
+  Procure por contacto@example.com
+  Substitua pelo seu email
+
+Adicionar Domínio Personalizado:
+  1. No Railway, vá a Project Settings
+  2. Clique em Networking
+  3. Configure o seu domínio
+  4. Atualize DNS na sua registadora
+
+
+================================================================================
+                             TROUBLESHOOTING
+================================================================================
+
+Q: Deploy falha no Railway
+A: Certifique-se que o Procfile existe e está correto
+
+Q: Página mostra erro 404
+A: Verifique que index.html está na raiz do repositório
+
+Q: Quer fazer mais deploy rápido?
+A: Basta fazer push para o GitHub e Railway redeploy automaticamente
+
+
+================================================================================
+                        FICHEIROS DO PROJETO
+================================================================================
+
+✓ index.html       — Página principal (HTML + CSS integrado)
+✓ package.json     — Metadados do projeto
+✓ Procfile         — Configuração Railway
+✓ README.md        — Documentação completa
+✓ .gitignore       — Ficheiros a ignorar no git
+
+
+================================================================================
+Pronto? Comece agora em https://github.com/new
+================================================================================
