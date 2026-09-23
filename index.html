@@ -1,794 +1,646 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Internet Search API - Managed Information Service</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --secondary: #10b981;
-            --text-dark: #1f2937;
-            --text-light: #6b7280;
-            --bg-light: #f9fafb;
-            --bg-white: #ffffff;
-            --border: #e5e7eb;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 20px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            color: var(--text-dark);
-            line-height: 1.6;
-            background-color: var(--bg-light);
-        }
-
-        header {
-            background: var(--bg-white);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow);
-        }
-
-        nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
-        .nav-button {
-            background: var(--primary);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            font-weight: 600;
-            transition: background 0.3s ease;
-        }
-
-        .nav-button:hover {
-            background: var(--primary-dark);
-        }
-
-        .lang-switch {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            text-decoration: none;
-            margin-left: 1rem;
-            padding: 0.4rem 0.8rem;
-            border: 1px solid var(--border);
-            border-radius: 0.4rem;
-            transition: all 0.2s ease;
-        }
-
-        .lang-switch:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 6rem 2rem;
-            text-align: center;
-        }
-
-        .hero-content {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: 800;
-            line-height: 1.1;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            margin-bottom: 2rem;
-            opacity: 0.95;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 1rem 2rem;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .btn-primary {
-            background: white;
-            color: var(--primary);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-secondary:hover {
-            background: white;
-            color: var(--primary);
-        }
-
-        .section {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            text-align: center;
-            color: var(--text-dark);
-        }
-
-        .section-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        .capabilities-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .capability-card {
-            background: var(--bg-white);
-            padding: 2rem;
-            border-radius: 0.75rem;
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow);
-        }
-
-        .capability-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary);
-        }
-
-        .capability-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .capability-card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
-            color: var(--text-dark);
-        }
-
-        .capability-card p {
-            color: var(--text-light);
-            line-height: 1.7;
-        }
-
-        .architecture-section {
-            background: var(--bg-white);
-        }
-
-        .principles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .principle {
-            padding: 2rem;
-            background: var(--bg-light);
-            border-radius: 0.75rem;
-            border-left: 4px solid var(--primary);
-        }
-
-        .principle h4 {
-            color: var(--primary);
-            margin-bottom: 0.75rem;
-            font-size: 1.1rem;
-        }
-
-        .principle p {
-            color: var(--text-light);
-            font-size: 0.95rem;
-        }
-
-        .flow-section {
-            background: var(--bg-white);
-        }
-
-        .flow-steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .flow-step {
-            text-align: center;
-            position: relative;
-        }
-
-        .step-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            font-weight: bold;
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
-        }
-
-        .flow-step h4 {
-            margin-bottom: 0.75rem;
-            color: var(--text-dark);
-        }
-
-        .flow-step p {
-            color: var(--text-light);
-            font-size: 0.95rem;
-        }
-
-        .security-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .security-card {
-            padding: 2rem;
-            background: var(--bg-light);
-            border-radius: 0.75rem;
-        }
-
-        .security-card h4 {
-            color: var(--text-dark);
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .security-card ul {
-            list-style: none;
-        }
-
-        .security-card li {
-            color: var(--text-light);
-            font-size: 0.95rem;
-            padding: 0.4rem 0;
-            padding-left: 1.25rem;
-            position: relative;
-        }
-
-        .security-card li::before {
-            content: "—";
-            position: absolute;
-            left: 0;
-            color: var(--primary);
-        }
-
-        .value-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .value-item {
-            padding: 2rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            border-radius: 0.75rem;
-            text-align: center;
-        }
-
-        .value-item h4 {
-            font-size: 1.25rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .value-item p {
-            opacity: 0.9;
-            font-size: 0.95rem;
-        }
-
-        .cta-section {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            text-align: center;
-            padding: 4rem 2rem;
-            border-radius: 1rem;
-            margin-top: 2rem;
-        }
-
-        .cta-section h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .cta-section p {
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            opacity: 0.95;
-        }
-
-        footer {
-            background: var(--text-dark);
-            color: white;
-            padding: 3rem 2rem;
-            text-align: center;
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: #d1d5db;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: white;
-        }
-
-        .footer-credit {
-            color: #9ca3af;
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.25rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .section-title {
-                font-size: 1.75rem;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .btn {
-                width: 100%;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Internet Search API — Client-Facing Architecture Overview</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  :root {
+    --text: #1a1a1a;
+    --text-light: #57606a;
+    --border: #d0d7de;
+    --bg: #ffffff;
+    --bg-subtle: #f6f8fa;
+    --code-bg: #f6f8fa;
+    --accent: #0969da;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --max-w: 860px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  .docbar {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-subtle);
+  }
+  .docbar-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0.85rem 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-light);
+  }
+  .docbar-inner code {
+    font-family: var(--mono);
+    background: var(--code-bg);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .docbar-links a {
+    color: var(--accent);
+    text-decoration: none;
+    margin-left: 1rem;
+  }
+  .docbar-links a:hover { text-decoration: underline; }
+
+  .wrap {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 5rem;
+  }
+
+  header.doc-title h1 {
+    font-size: 2rem;
+    margin: 0 0 0.4rem;
+    font-weight: 650;
+  }
+  header.doc-title p.subtitle {
+    color: var(--text-light);
+    margin: 0 0 1.5rem;
+    font-size: 1.05rem;
+  }
+
+  nav.toc {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    background: var(--bg-subtle);
+    margin-bottom: 2.5rem;
+    font-size: 0.92rem;
+  }
+  nav.toc div.toc-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+  nav.toc ol {
+    margin: 0;
+    padding-left: 1.25rem;
+    columns: 2;
+    column-gap: 2rem;
+  }
+  nav.toc li { margin-bottom: 0.3rem; break-inside: avoid; }
+  nav.toc a { color: var(--accent); text-decoration: none; }
+  nav.toc a:hover { text-decoration: underline; }
+
+  section { margin-bottom: 2.75rem; }
+
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 650;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.4rem;
+    margin: 0 0 1rem;
+    scroll-margin-top: 1rem;
+  }
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 650;
+    margin: 1.5rem 0 0.5rem;
+  }
+  p { margin: 0 0 1rem; }
+  ul, ol { margin: 0 0 1rem; padding-left: 1.4rem; }
+  li { margin-bottom: 0.35rem; }
+  strong { font-weight: 650; }
+
+  blockquote {
+    margin: 1rem 0;
+    padding: 0.6rem 1rem;
+    border-left: 3px solid var(--accent);
+    background: var(--bg-subtle);
+    color: var(--text);
+    font-style: normal;
+  }
+
+  code {
+    font-family: var(--mono);
+    background: var(--code-bg);
+    padding: 0.15rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.88em;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0 1.5rem;
+    font-size: 0.92rem;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+  }
+  th {
+    background: var(--bg-subtle);
+    font-weight: 650;
+  }
+  tr:nth-child(even) td { background: #fbfcfd; }
+
+  .component-list {
+    padding-left: 0;
+    list-style: none;
+    counter-reset: component;
+  }
+  .component-list > li {
+    counter-increment: component;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+  .component-list > li > .comp-title {
+    font-weight: 650;
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+  .component-list > li > .comp-title::before {
+    content: counter(component) ". ";
+    color: var(--accent);
+  }
+  .component-list ul { margin-top: 0.4rem; margin-bottom: 0; }
+
+  .principles-grid, .security-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0 1.5rem;
+  }
+  .principle-card, .security-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.9rem 1.1rem;
+  }
+  .principle-card h4, .security-card h4 {
+    margin: 0 0 0.4rem;
+    font-size: 0.98rem;
+    font-weight: 650;
+  }
+  .principle-card p, .security-card p, .security-card ul {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--text-light);
+  }
+  .security-card ul { padding-left: 1.1rem; }
+  .security-card li { margin-bottom: 0.25rem; }
+
+  .flow-steps {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0 1.5rem;
+  }
+  .flow-steps li {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.75rem 0.9rem;
+    font-size: 0.9rem;
+  }
+  .flow-steps .step-n {
+    display: inline-block;
+    width: 1.4rem;
+    height: 1.4rem;
+    line-height: 1.4rem;
+    text-align: center;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 650;
+    margin-bottom: 0.4rem;
+  }
+
+  .diagram-block {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem;
+    background: var(--bg-subtle);
+    overflow-x: auto;
+    margin: 1rem 0 1.5rem;
+  }
+  .diagram-caption {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+
+  .limitations-list > li {
+    margin-bottom: 0.9rem;
+  }
+  .limitations-list strong { display: inline; }
+
+  footer.doc-footer {
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  footer.doc-footer a { color: var(--accent); text-decoration: none; }
+  footer.doc-footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    nav.toc ol { columns: 1; }
+    .docbar-inner { font-size: 0.78rem; }
+  }
+</style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <nav>
-            <a href="#" class="logo">🔍 Search API</a>
-            <ul class="nav-links">
-                <li><a href="#capabilities">Capabilities</a></li>
-                <li><a href="#architecture">Architecture</a></li>
-                <li><a href="#flow">Service Flow</a></li>
-                <li><a href="#security">Security</a></li>
-                <li><a href="#value">Value</a></li>
-            </ul>
-            <div style="display: flex; align-items: center;">
-                <a href="#contact" class="nav-button">Get in Touch</a>
-                <a href="index-pt.html" class="lang-switch">PT 🇵🇹</a>
-            </div>
-        </nav>
+
+  <div class="docbar">
+    <div class="docbar-inner">
+      <span>Doc <code>internet-search-api-architecture</code> &middot; v1.1 &middot; Last updated 2026-09-23</span>
+      <span class="docbar-links">
+        <a href="index-pt.html">PT version</a>
+      </span>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <header class="doc-title">
+      <h1>Internet Search API</h1>
+      <p class="subtitle">Client-Facing Architecture Overview</p>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Internet Search API</h1>
-            <p>Transforming a simple search request into a managed information service — reliable, reusable, and ready for intelligent integration.</p>
-            <div class="hero-buttons">
-                <a href="#capabilities" class="btn btn-primary">Learn More</a>
-                <a href="#contact" class="btn btn-secondary">Get Started</a>
-            </div>
-        </div>
+    <nav class="toc" aria-label="Table of contents">
+      <div class="toc-label">Contents</div>
+      <ol>
+        <li><a href="#objective">Business Objective</a></li>
+        <li><a href="#expect">What You Can Expect</a></li>
+        <li><a href="#architecture">High-Level Architecture</a></li>
+        <li><a href="#principles">Architecture Principles</a></li>
+        <li><a href="#security">Security and Governance</a></li>
+        <li><a href="#flow">End-to-End Service Flow</a></li>
+        <li><a href="#diagrams">Sequence &amp; Context Diagrams</a></li>
+        <li><a href="#limitations">Limitations and Considerations</a></li>
+        <li><a href="#value">Value Delivered</a></li>
+        <li><a href="#next-steps">Next Steps</a></li>
+        <li><a href="#history">Document History</a></li>
+      </ol>
+    </nav>
+
+    <section id="objective">
+      <h2>Business Objective</h2>
+      <p>The purpose of this solution is to transform a simple search request into a managed information service.</p>
+      <p>Instead of only executing a one-time internet search, the platform will:</p>
+      <ol>
+        <li><strong>receive and understand the search intent</strong> — immediately</li>
+        <li><strong>confirm that the request has been accepted</strong> — within seconds</li>
+        <li><strong>search relevant public web sources</strong> — asynchronously in the background</li>
+        <li><strong>filter and organize the collected content</strong> — applying validation and classification</li>
+        <li><strong>store the validated information for later use</strong> — for indefinite reuse and audit trails</li>
+        <li><strong>inform the client when the information is ready</strong> — via automated notification</li>
+        <li><strong>allow structured consultation of the stored information through MCP</strong> — enabling downstream integration</li>
+      </ol>
+      <p>This makes the service suitable not only for immediate use, but also for reuse, auditability, and integration with other digital channels.</p>
     </section>
 
-    <!-- Business Objective -->
-    <section class="section" id="objective">
-        <h2 class="section-title">Business Objective</h2>
-        <p class="section-subtitle">
-            The purpose of this solution is to transform a simple search request into a managed information service.
-        </p>
-        <div class="capabilities-grid">
-            <div class="capability-card">
-                <div class="capability-icon">🎯</div>
-                <h3>1. Understand Intent</h3>
-                <p>Receive and understand the search intent behind every request.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-icon">✅</div>
-                <h3>2. Confirm Acceptance</h3>
-                <p>Confirm that the request has been accepted, without delay.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-icon">🌐</div>
-                <h3>3. Search Sources</h3>
-                <p>Search relevant public web sources for the requested information.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-icon">🗂️</div>
-                <h3>4. Filter & Organize</h3>
-                <p>Filter and organize the collected content into a coherent result set.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-icon">💾</div>
-                <h3>5. Store for Later</h3>
-                <p>Store the validated information for later use, reuse, and audit.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-icon">🔔</div>
-                <h3>6. Notify Readiness</h3>
-                <p>Inform the client when the information is ready for consultation.</p>
-            </div>
-        </div>
-        <p style="text-align: center; margin-top: 2rem; color: var(--text-light); max-width: 700px; margin-left: auto; margin-right: auto;">
-            Plus structured consultation of the stored information through MCP — making the service suitable not only for immediate use, but also for reuse, auditability, and integration with other digital channels.
-        </p>
+    <section id="expect">
+      <h2>What You Can Expect</h2>
+
+      <h3>Fast Response to New Requests</h3>
+      <p>The platform is designed to acknowledge receipt of a search request immediately — within seconds — without forcing the client to wait for the full internet research cycle.</p>
+
+      <h3>Reliable Background Processing</h3>
+      <p>The actual search and information preparation take place asynchronously in the background, allowing the platform to remain responsive even when external web sources are slower or temporarily unavailable.</p>
+
+      <h3>Curated Results Instead of Raw Web Output</h3>
+      <p>The solution does not simply return unfiltered search results. It applies validation, organization, and classification so that the final output is more useful, more consistent, and easier to consume.</p>
+
+      <h3>Reusable and Consultable Information</h3>
+      <p>The curated information is stored and can be consulted multiple times later, avoiding unnecessary repetition and improving operational efficiency and return on investment for each search request.</p>
+
+      <h3>Structured Access Through MCP</h3>
+      <p>The final information is exposed through an MCP interface, enabling intelligent systems and downstream consumers to query the stored results in a consistent and structured way.</p>
+
+      <h3>Expected Performance Characteristics</h3>
+      <table>
+        <thead><tr><th>Metric</th><th>Target</th></tr></thead>
+        <tbody>
+          <tr><td>Request acknowledgment</td><td>&lt; 1 second</td></tr>
+          <tr><td>Full research completion</td><td>5–15 minutes (depends on query complexity and source availability)</td></tr>
+          <tr><td>Result storage</td><td>Indefinite, with versioning and audit trail support</td></tr>
+          <tr><td>MCP query response</td><td>&lt; 500 ms for indexed results</td></tr>
+        </tbody>
+      </table>
     </section>
 
-    <!-- What You Can Expect -->
-    <section class="section architecture-section" id="capabilities">
-        <h2 class="section-title">What You Can Expect</h2>
-        <p class="section-subtitle">Built for speed, reliability, and quality — from request to structured result</p>
-        <div class="capabilities-grid">
-            <div class="capability-card">
-                <div class="capability-icon">⚡</div>
-                <h3>Fast Response to New Requests</h3>
-                <p>The platform is designed to acknowledge receipt of a search request immediately, without forcing the client to wait for the full internet research cycle.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-icon">🔄</div>
-                <h3>Reliable Background Processing</h3>
-                <p>The actual search and information preparation take place asynchronously in the background, allowing the platform to remain responsive even when external web sources are slower.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-icon">✨</div>
-                <h3>Curated Results, Not Raw Output</h3>
-                <p>The solution does not simply return unfiltered search results. It applies validation, organization, and classification for a more useful, consistent output.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-icon">💾</div>
-                <h3>Reusable & Consultable Information</h3>
-                <p>Once processing is complete, curated information is stored and can be consulted again later, avoiding unnecessary repetition and improving efficiency.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-icon">🔌</div>
-                <h3>Structured Access Through MCP</h3>
-                <p>The final information is exposed through an MCP interface, enabling intelligent systems and downstream consumers to query stored results consistently.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-icon">📈</div>
-                <h3>Built to Scale</h3>
-                <p>The search workload can grow independently from the client-facing entry point as demand increases.</p>
-            </div>
-        </div>
+    <section id="architecture">
+      <h2>High-Level Architecture</h2>
+      <blockquote>Accept quickly, process carefully, store reliably, and expose clearly.</blockquote>
+      <p>At a high level, the platform includes the following business capabilities:</p>
+
+      <ul class="component-list">
+        <li>
+          <span class="comp-title">Client Access</span>
+          The entry point used by the client application or business consumer.
+          <ul>
+            <li>Submit search requests</li>
+            <li>Receive immediate acknowledgment</li>
+            <li>Receive notification when results are available</li>
+            <li>Consult available results</li>
+          </ul>
+        </li>
+        <li>
+          <span class="comp-title">Search API</span>
+          The front door of the platform.
+          <ul>
+            <li>Receive the request</li>
+            <li>Validate that the request is acceptable</li>
+            <li>Organize the request into a standard internal format</li>
+            <li>Confirm acceptance immediately</li>
+          </ul>
+        </li>
+        <li>
+          <span class="comp-title">Processing Orchestration</span>
+          Ensures the request is handled in a controlled and scalable way.
+          <ul>
+            <li>Move the request into background processing</li>
+            <li>Protect the platform from delays caused by external sources</li>
+            <li>Support scalability as demand grows</li>
+          </ul>
+        </li>
+        <li>
+          <span class="comp-title">Internet Search &amp; Content Preparation</span>
+          Performs the actual research and information refinement.
+          <ul>
+            <li>Search external web sources</li>
+            <li>Collect relevant articles and references</li>
+            <li>Remove duplicate information</li>
+            <li>Validate and classify content</li>
+            <li>Prepare a curated result set</li>
+          </ul>
+        </li>
+        <li>
+          <span class="comp-title">Information Repository</span>
+          The long-term knowledge store of the solution.
+          <ul>
+            <li>Keep the accepted requests</li>
+            <li>Keep the processed results</li>
+            <li>Preserve traceability and historical visibility</li>
+            <li>Support consultation and reporting</li>
+            <li>Maintain version history for audit compliance</li>
+          </ul>
+        </li>
+        <li>
+          <span class="comp-title">Notification Capability</span>
+          Informs interested consumers when the requested information becomes available.
+          <ul>
+            <li>Communicate completion</li>
+            <li>Improve the end-user experience</li>
+            <li>Avoid constant manual status checking</li>
+          </ul>
+        </li>
+        <li>
+          <span class="comp-title">MCP Access Layer</span>
+          Exposes the curated information in a structured way for intelligent consumers.
+          <ul>
+            <li>Provide controlled access to stored search results</li>
+            <li>Enable reuse of the information by AI-enabled or MCP-compatible consumers</li>
+            <li>Separate information consumption from information collection</li>
+            <li>Support programmatic integration with downstream systems</li>
+          </ul>
+        </li>
+      </ul>
     </section>
 
-    <!-- High-Level Architecture -->
-    <section class="section" id="architecture">
-        <h2 class="section-title">High-Level Architecture</h2>
-        <p class="section-subtitle">
-            "Accept quickly, process carefully, store reliably, and expose clearly."
-        </p>
-        <div class="capabilities-grid">
-            <div class="capability-card">
-                <div class="capability-icon">1️⃣</div>
-                <h3>Client Access</h3>
-                <p>The entry point used by the client application or business consumer — submit requests, receive acknowledgement and notifications, and consult results.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-icon">2️⃣</div>
-                <h3>Search API</h3>
-                <p>The front door of the platform — receives, validates, and standardizes each request, confirming acceptance immediately.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-icon">3️⃣</div>
-                <h3>Processing Orchestration</h3>
-                <p>Moves requests into background processing, protecting the platform from delays and supporting scalability as demand grows.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-icon">4️⃣</div>
-                <h3>Internet Search & Content Preparation</h3>
-                <p>Performs the actual research and refinement — searching, deduplicating, validating, and classifying content into a curated result set.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-icon">5️⃣</div>
-                <h3>Information Repository</h3>
-                <p>The long-term knowledge store — keeps requests and results, preserves traceability, and supports consultation and reporting.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-icon">6️⃣</div>
-                <h3>Notification Capability</h3>
-                <p>Informs interested consumers when requested information becomes available, avoiding constant manual status checking.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-icon">7️⃣</div>
-                <h3>MCP Access Layer</h3>
-                <p>Exposes curated information in a structured way, enabling reuse by AI-enabled or MCP-compatible consumers.</p>
-            </div>
+    <section id="principles">
+      <h2>Architecture Principles</h2>
+      <div class="principles-grid">
+        <div class="principle-card">
+          <h4>Separation of Responsibilities</h4>
+          <p>Each major capability has a clear role: receiving requests, processing information, storing results, notifying users, and exposing curated data.</p>
         </div>
+        <div class="principle-card">
+          <h4>Responsiveness</h4>
+          <p>The platform answers quickly at the start of the process, while the more time-consuming research activities happen in the background.</p>
+        </div>
+        <div class="principle-card">
+          <h4>Scalability</h4>
+          <p>The design allows the search workload to grow independently from the client-facing entry point.</p>
+        </div>
+        <div class="principle-card">
+          <h4>Resilience</h4>
+          <p>External search providers may be slower or temporarily unavailable. The architecture reduces the impact of those variations on the client experience.</p>
+        </div>
+        <div class="principle-card">
+          <h4>Reusability</h4>
+          <p>Processed information is stored and made available for later consultation, rather than being treated as a disposable response.</p>
+        </div>
+        <div class="principle-card">
+          <h4>Controlled Exposure</h4>
+          <p>The MCP layer provides a clear and governed way to access stored information without coupling consumers to the internal processing flow.</p>
+        </div>
+      </div>
     </section>
 
-    <!-- Architecture Principles -->
-    <section class="section architecture-section">
-        <h2 class="section-title">Architecture Principles</h2>
-        <p class="section-subtitle">Well-established principles appropriate for client-facing enterprise platforms</p>
-        <div class="principles-grid">
-            <div class="principle">
-                <h4>Separation of Responsibilities</h4>
-                <p>Each major capability has a clear role: receiving requests, processing information, storing results, notifying users, and exposing curated data.</p>
-            </div>
-            <div class="principle">
-                <h4>Responsiveness</h4>
-                <p>The platform answers quickly at the start of the process, while the more time-consuming research activities happen in the background.</p>
-            </div>
-            <div class="principle">
-                <h4>Scalability</h4>
-                <p>The design allows the search workload to grow independently from the client-facing entry point.</p>
-            </div>
-            <div class="principle">
-                <h4>Resilience</h4>
-                <p>External search providers may be slower or temporarily unavailable. The architecture reduces the impact of those variations on the client experience.</p>
-            </div>
-            <div class="principle">
-                <h4>Reusability</h4>
-                <p>Processed information is stored and made available for later consultation, rather than being treated as a disposable response.</p>
-            </div>
-            <div class="principle">
-                <h4>Controlled Exposure</h4>
-                <p>The MCP layer provides a clear and governed way to access stored information without coupling consumers to the internal processing flow.</p>
-            </div>
+    <section id="security">
+      <h2>Security and Governance Considerations</h2>
+      <p>Although this document is intentionally high-level, the solution is expected to follow modern architecture best practices in the following areas:</p>
+      <div class="security-grid">
+        <div class="security-card">
+          <h4>Access Control</h4>
+          <ul>
+            <li>Only authorized consumers should be allowed to submit or consult requests</li>
+            <li>Access should be governed according to the client and business context</li>
+            <li>Rate limiting and quota management should prevent abuse</li>
+          </ul>
         </div>
+        <div class="security-card">
+          <h4>Data Protection</h4>
+          <ul>
+            <li>Stored information should be protected appropriately according to classification levels</li>
+            <li>Sensitive credentials and access secrets must remain controlled and never exposed</li>
+            <li>Auditability should be maintained for all important lifecycle events (create, access, delete)</li>
+          </ul>
+        </div>
+        <div class="security-card">
+          <h4>Operational Monitoring</h4>
+          <ul>
+            <li>The platform should monitor search activity, status, throughput, and failure rates in real time</li>
+            <li>Usage controls should prevent abuse and help protect service quality</li>
+            <li>Alerts should notify operators of anomalies or capacity concerns</li>
+          </ul>
+        </div>
+        <div class="security-card">
+          <h4>Data Quality and Trust</h4>
+          <ul>
+            <li>Collected information must be validated before being marked as available business data</li>
+            <li>Duplicated or low-quality entries should be minimized whenever possible</li>
+            <li>Source tracking should be maintained so consumers understand information provenance</li>
+            <li>Version history should be preserved for compliance and audit trails</li>
+          </ul>
+        </div>
+      </div>
     </section>
 
-    <!-- End-to-End Service Flow -->
-    <section class="section flow-section" id="flow">
-        <h2 class="section-title">End-to-End Service Flow</h2>
-        <p class="section-subtitle">How the service behaves from the client's point of view</p>
-        <div class="flow-steps">
-            <div class="flow-step">
-                <div class="step-number">1</div>
-                <h4>Submit Request</h4>
-                <p>The client submits a request describing the information to be searched.</p>
-            </div>
-            <div class="flow-step">
-                <div class="step-number">2</div>
-                <h4>Acceptance</h4>
-                <p>The platform reviews the request and confirms it has been accepted.</p>
-            </div>
-            <div class="flow-step">
-                <div class="step-number">3</div>
-                <h4>Background Search</h4>
-                <p>The search is performed asynchronously in the background.</p>
-            </div>
-            <div class="flow-step">
-                <div class="step-number">4</div>
-                <h4>Collect References</h4>
-                <p>Relevant articles and references are collected.</p>
-            </div>
-            <div class="flow-step">
-                <div class="step-number">5</div>
-                <h4>Curation</h4>
-                <p>Information is cleaned, checked, and organized.</p>
-            </div>
-            <div class="flow-step">
-                <div class="step-number">6</div>
-                <h4>Storage</h4>
-                <p>Curated information is stored for consultation.</p>
-            </div>
-            <div class="flow-step">
-                <div class="step-number">7</div>
-                <h4>Notification</h4>
-                <p>The client is informed that results are available.</p>
-            </div>
-            <div class="flow-step">
-                <div class="step-number">8</div>
-                <h4>MCP Access</h4>
-                <p>Stored information is accessed through the MCP interface.</p>
-            </div>
-        </div>
+    <section id="flow">
+      <h2>End-to-End Service Flow</h2>
+      <p>From the client point of view, the service behaves as follows:</p>
+      <ol class="flow-steps">
+        <li><span class="step-n">1</span><br>A client submits a request describing the information to be searched.</li>
+        <li><span class="step-n">2</span><br>The platform reviews the request and confirms that it has been accepted.</li>
+        <li><span class="step-n">3</span><br>The search is performed in the background.</li>
+        <li><span class="step-n">4</span><br>Relevant articles and references are collected.</li>
+        <li><span class="step-n">5</span><br>The collected information is cleaned, checked, and organized.</li>
+        <li><span class="step-n">6</span><br>The curated information is stored for consultation.</li>
+        <li><span class="step-n">7</span><br>The client is informed that the results are available.</li>
+        <li><span class="step-n">8</span><br>The stored information can then be accessed through the MCP interface.</li>
+      </ol>
+
+      <h3>Expected Outcomes</h3>
+      <ul>
+        <li><strong>Acknowledgment within seconds</strong> — clients receive immediate confirmation that their request has been accepted</li>
+        <li><strong>Curated results within 5–15 minutes</strong> — research is completed and organized without client wait time</li>
+        <li><strong>Indefinite reusability</strong> — information is stored and can be consulted multiple times without re-searching</li>
+        <li><strong>Straightforward integration</strong> — downstream systems can consume results programmatically via MCP</li>
+      </ul>
     </section>
 
-    <!-- Security and Governance -->
-    <section class="section" id="security">
-        <h2 class="section-title">Security and Governance</h2>
-        <p class="section-subtitle">Modern architecture best practices, even at a high level</p>
-        <div class="security-grid">
-            <div class="security-card">
-                <h4>🔐 Secure Access</h4>
-                <ul>
-                    <li>Only authorized consumers should be allowed to submit or consult requests</li>
-                    <li>Access should be governed according to the client and business context</li>
-                </ul>
-            </div>
-            <div class="security-card">
-                <h4>🛡️ Data Protection</h4>
-                <ul>
-                    <li>Stored information should be protected appropriately</li>
-                    <li>Sensitive credentials and access secrets must remain controlled</li>
-                    <li>Auditability should be maintained for important actions and lifecycle events</li>
-                </ul>
-            </div>
-            <div class="security-card">
-                <h4>📊 Operational Control</h4>
-                <ul>
-                    <li>The platform should monitor search activity, status, throughput, and failures</li>
-                    <li>Usage controls should prevent abuse and help protect service quality</li>
-                </ul>
-            </div>
-            <div class="security-card">
-                <h4>✅ Quality & Trustworthiness</h4>
-                <ul>
-                    <li>Collected information should be validated and curated before being presented as available business data</li>
-                    <li>Duplicated or low-quality entries should be reduced whenever possible</li>
-                </ul>
-            </div>
-        </div>
+    <section id="diagrams">
+      <h2>Sequence and Context Diagrams</h2>
+
+      <div class="diagram-block">
+        <pre class="mermaid">
+sequenceDiagram
+	autonumber
+	participant Client as Client
+	participant API as Search API
+	participant Processing as Background Processing
+	participant Sources as External Web Sources
+	participant Repository as Information Repository
+	participant Notify as Notification Service
+	participant MCP as MCP Access Layer
+
+	Client->>API: Submit search request
+	Note over API: Immediate processing
+	API-->>Client: Request accepted (< 1s)
+	API->>Processing: Start async handling
+	Note over Processing: 5-15 minutes
+	Processing->>Sources: Search public sources
+	Sources-->>Processing: Return collected information
+	Processing->>Processing: Validate, organize & classify
+	Processing->>Repository: Store curated results
+	Processing->>Notify: Publish completion event
+	Notify-->>Client: Information is available
+	Client->>MCP: Query stored information
+	MCP->>Repository: Retrieve curated results
+	Repository-->>MCP: Return structured data
+	MCP-->>Client: Present available information
+        </pre>
+        <div class="diagram-caption">Sequence diagram — end-to-end request lifecycle</div>
+      </div>
+
+      <div class="diagram-block">
+        <pre class="mermaid">
+flowchart LR
+	Client[Client Application or Business Consumer]
+	API[Search API]
+	Processing[Background Processing Capability]
+	Sources[External Web Sources]
+	Repository[(Curated Information Repository)]
+	Notify[Notification Capability]
+	MCP[MCP Access Layer]
+
+	Client --> API
+	API --> Processing
+	Processing --> Sources
+	Processing --> Repository
+	Processing --> Notify
+	Client --> MCP
+	MCP --> Repository
+        </pre>
+        <div class="diagram-caption">Context diagram — system boundaries and data flow</div>
+      </div>
     </section>
 
-    <!-- Value Section -->
-    <section class="section architecture-section" id="value">
-        <h2 class="section-title">Value Delivered to the Client</h2>
-        <p class="section-subtitle">What this architecture is intended to deliver</p>
-        <div class="value-grid">
-            <div class="value-item">
-                <h4>🚀 Speed</h4>
-                <p>Requests are accepted immediately</p>
-            </div>
-            <div class="value-item">
-                <h4>🎯 Clarity</h4>
-                <p>The client knows when information is available</p>
-            </div>
-            <div class="value-item">
-                <h4>✅ Quality</h4>
-                <p>Results are curated rather than simply forwarded</p>
-            </div>
-            <div class="value-item">
-                <h4>📊 Consistency</h4>
-                <p>Information is stored and exposed in a structured format</p>
-            </div>
-            <div class="value-item">
-                <h4>📈 Scalability</h4>
-                <p>The platform can evolve as usage grows</p>
-            </div>
-            <div class="value-item">
-                <h4>🔮 Future Readiness</h4>
-                <p>MCP exposure enables broader intelligent consumption scenarios</p>
-            </div>
-        </div>
+    <section id="limitations">
+      <h2>Limitations and Considerations</h2>
+      <p>While the Internet Search API provides significant value, clients should be aware of the following limitations and design constraints:</p>
+      <ul class="limitations-list">
+        <li><strong>Source Dependency</strong> — search quality and completeness depend on the availability and comprehensiveness of the public sources being queried. Source unavailability or changes in source structure may impact results.</li>
+        <li><strong>Information Freshness</strong> — results reflect the state of information at the time of the query. If the information landscape changes afterward, a new search is required to obtain updated results.</li>
+        <li><strong>Coverage Variability</strong> — not all information types or sources are equally comprehensive across all domains. Specialized or niche topics may have limited coverage in public sources.</li>
+        <li><strong>Data Governance and Privacy</strong> — search queries and results are stored in the repository for audit and reuse purposes. Appropriate data governance policies must be in place to protect sensitive information and comply with applicable regulations.</li>
+        <li><strong>Operational Costs</strong> — background processing, storage, and MCP access have operational costs that scale with usage volume and query complexity. Usage patterns should be monitored and appropriate quotas set.</li>
+        <li><strong>Search Complexity</strong> — extremely broad or complex search queries may produce very large result sets. Scope and filtering should be used to keep results manageable and relevant.</li>
+      </ul>
     </section>
 
-    <!-- Conclusion -->
-    <section class="section">
-        <h2 class="section-title">Conclusion</h2>
-        <p style="max-width: 800px; margin: 0 auto 2rem; text-align: center; color: var(--text-light); font-size: 1.05rem;">
-            The proposed Internet Search API is more than a simple search endpoint. It is a managed information service designed to receive requests efficiently, perform web research responsibly, organize the resulting content, store it reliably, and make it available through a modern consultation layer.
-        </p>
-        <p style="max-width: 800px; margin: 0 auto; text-align: center; color: var(--text-light); font-size: 1.05rem;">
-            For the client, this means a solution that is easy to understand, fast to interact with, reliable in operation, structured for long-term use, and suitable for integration with intelligent consumers.
-        </p>
+    <section id="value">
+      <h2>Value Delivered</h2>
+      <table>
+        <thead><tr><th>Dimension</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Speed</td><td>Requests are accepted immediately; clients are never blocked by external sources.</td></tr>
+          <tr><td>Clarity</td><td>The client knows exactly when information is available and can plan downstream processes accordingly.</td></tr>
+          <tr><td>Quality</td><td>Results are curated and validated rather than simply forwarded from web search engines.</td></tr>
+          <tr><td>Consistency</td><td>Information is stored and exposed in a structured, queryable format.</td></tr>
+          <tr><td>Reusability</td><td>Information can be consulted multiple times without re-searching, improving ROI.</td></tr>
+          <tr><td>Scalability</td><td>The platform can evolve as usage grows; capacity is independent of client growth.</td></tr>
+          <tr><td>Integration</td><td>MCP exposure enables broader intelligent consumption scenarios and downstream automation.</td></tr>
+          <tr><td>Auditability</td><td>Full lifecycle tracking and version history support compliance and governance needs.</td></tr>
+        </tbody>
+      </table>
     </section>
 
-    <!-- CTA Section -->
-    <section class="section">
-        <div class="cta-section" id="contact">
-            <h2>Ready to Transform Your Information Search?</h2>
-            <p>Start using the Internet Search API today and discover the power of a managed information service</p>
-            <a href="mailto:contact@example.com" class="btn btn-primary">Get in Touch</a>
-        </div>
+    <section id="next-steps">
+      <h2>Next Steps</h2>
+      <p>To operationalize or extend the Internet Search API:</p>
+      <ol>
+        <li><strong>Define Requirements</strong> — clarify specific information needs, search domains, and use cases; establish priorities and success criteria.</li>
+        <li><strong>Evaluate Sources</strong> — assess source reliability, coverage, update frequency, and access policies for the relevant domain.</li>
+        <li><strong>Design Integration</strong> — plan how downstream systems and stakeholders will consume results via the MCP interface; define data formats and access patterns.</li>
+        <li><strong>Prototype</strong> — validate the architecture and key assumptions about source quality and research time on a focused search domain.</li>
+        <li><strong>Scale</strong> — monitor performance, adoption, and operational costs; expand based on actual usage patterns and demand.</li>
+      </ol>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="#capabilities">Capabilities</a>
-                <a href="#architecture">Architecture</a>
-                <a href="#flow">Service Flow</a>
-                <a href="#security">Security</a>
-                <a href="#value">Value</a>
-                <a href="index-pt.html">Português 🇵🇹</a>
-            </div>
-            <p class="footer-credit">Internet Search API © 2026. A professional architecture for managed information discovery.</p>
-        </div>
+    <section id="history">
+      <h2>Document History</h2>
+      <table>
+        <thead><tr><th>Version</th><th>Date</th><th>Changes</th></tr></thead>
+        <tbody>
+          <tr><td>1.0</td><td>2026-09-23</td><td>Initial version</td></tr>
+          <tr><td>1.1</td><td>2026-09-23</td><td>Corrected grammar and terminology inconsistencies; added performance characteristics, expanded governance section, added limitations and next steps</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer class="doc-footer">
+      <span>Internet Search API — Architecture Overview</span>
+      <span><a href="index-pt.html">Ver versao em portugues</a></span>
     </footer>
+
+  </div>
+
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
+  </script>
 </body>
 </html>
