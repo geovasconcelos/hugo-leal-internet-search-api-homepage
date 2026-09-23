@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internet Search API - Serviço de Busca Gerenciada</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #10b981;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --bg-light: #f9fafb;
+            --bg-white: #ffffff;
+            --border: #e5e7eb;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            background-color: var(--bg-light);
+        }
+
+        header {
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-button {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: var(--primary-dark);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: var(--text-dark);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .capability-card {
+            background: var(--bg-white);
+            padding: 2rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .capability-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .capability-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .capability-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .capability-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        .architecture-section {
+            background: var(--bg-white);
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .principle {
+            padding: 2rem;
+            background: var(--bg-light);
+            border-radius: 0.75rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .principle h4 {
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .principle p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .flow-section {
+            background: var(--bg-white);
+        }
+
+        .flow-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .flow-step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .flow-step h4 {
+            margin-bottom: 0.75rem;
+            color: var(--text-dark);
+        }
+
+        .flow-step p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .value-item {
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-radius: 0.75rem;
+            text-align: center;
+        }
+
+        .value-item h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .value-item p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-align: center;
+            padding: 4rem 2rem;
+            border-radius: 1rem;
+            margin-top: 2rem;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-credit {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.25rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .section-title {
+                font-size: 1.75rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="#" class="logo">🔍 Search API</a>
+            <ul class="nav-links">
+                <li><a href="#capabilities">Capacidades</a></li>
+                <li><a href="#architecture">Arquitetura</a></li>
+                <li><a href="#flow">Fluxo</a></li>
+                <li><a href="#value">Valor</a></li>
+            </ul>
+            <a href="#contact" class="nav-button">Contactar</a>
+            <a href="index.html" style="font-size: 0.85rem; color: #6b7280; text-decoration: none; margin-left: 1rem; padding: 0.4rem 0.8rem; border: 1px solid #e5e7eb; border-radius: 0.4rem;">EN 🇬🇧</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Internet Search API</h1>
+            <p>Transforme buscas simples num serviço de informação gerenciada, confiável e reutilizável</p>
+            <div class="hero-buttons">
+                <a href="#capabilities" class="btn btn-primary">Saiba Mais</a>
+                <a href="#contact" class="btn btn-secondary">Começar</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Capabilities Section -->
+    <section class="section" id="capabilities">
+        <h2 class="section-title">Capacidades Principais</h2>
+        <p class="section-subtitle">Tudo o que você precisa para gerenciar buscas de informação de forma profissional</p>
+        <div class="capabilities-grid">
+            <div class="capability-card">
+                <div class="capability-icon">⚡</div>
+                <h3>Resposta Rápida</h3>
+                <p>Aceite requisições imediatamente, sem forçar o cliente a esperar pelo ciclo completo de pesquisa.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">🔄</div>
+                <h3>Processamento em Background</h3>
+                <p>A busca e preparação acontecem de forma assíncrona, mantendo a plataforma sempre responsiva.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">✨</div>
+                <h3>Resultados Curados</h3>
+                <p>Não retornamos apenas resultados brutos. Aplicamos validação, organização e classificação.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">💾</div>
+                <h3>Informação Reutilizável</h3>
+                <p>Os resultados são armazenados e consultáveis depois, evitando repetição desnecessária.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">🔌</div>
+                <h3>Acesso Estruturado via MCP</h3>
+                <p>Exponha resultados através de uma interface MCP para consumo por sistemas inteligentes.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">📈</div>
+                <h3>Escalável</h3>
+                <p>Arquitetura desenhada para crescer conforme a procura por informação aumenta.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="section architecture-section" id="architecture">
+        <h2 class="section-title">Princípios de Arquitetura</h2>
+        <p class="section-subtitle">Construída sobre princípios comprovados de design empresarial</p>
+        <div class="principles-grid">
+            <div class="principle">
+                <h4>Separação de Responsabilidades</h4>
+                <p>Cada capacidade tem um papel claro: receber requisições, processar informação, armazenar resultados, notificar usuários.</p>
+            </div>
+            <div class="principle">
+                <h4>Responsividade</h4>
+                <p>A plataforma responde rapidamente no início, enquanto atividades mais complexas ocorrem em background.</p>
+            </div>
+            <div class="principle">
+                <h4>Escalabilidade</h4>
+                <p>O design permite que a carga de trabalho cresça independentemente do ponto de entrada para o cliente.</p>
+            </div>
+            <div class="principle">
+                <h4>Resiliência</h4>
+                <p>Fontes externas podem ser lentas ou indisponíveis. A arquitetura reduz o impacto na experiência do cliente.</p>
+            </div>
+            <div class="principle">
+                <h4>Reusabilidade</h4>
+                <p>Informação processada é armazenada e disponibilizada para consulta futura, não descartável.</p>
+            </div>
+            <div class="principle">
+                <h4>Exposição Controlada</h4>
+                <p>A camada MCP oferece acesso governado aos resultados sem acoplar consumidores ao fluxo interno.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flow Section -->
+    <section class="section flow-section" id="flow">
+        <h2 class="section-title">Fluxo de Serviço End-to-End</h2>
+        <p class="section-subtitle">Como o serviço funciona da perspectiva do cliente</p>
+        <div class="flow-steps">
+            <div class="flow-step">
+                <div class="step-number">1</div>
+                <h4>Submeter Requisição</h4>
+                <p>Cliente descreve a informação a ser buscada</p>
+            </div>
+            <div class="flow-step">
+                <div class="step-number">2</div>
+                <h4>Confirmação</h4>
+                <p>Plataforma revê e confirma aceite imediato</p>
+            </div>
+            <div class="flow-step">
+                <div class="step-number">3</div>
+                <h4>Busca em Background</h4>
+                <p>Pesquisa realizada assincronamente</p>
+            </div>
+            <div class="flow-step">
+                <div class="step-number">4</div>
+                <h4>Recolher Artigos</h4>
+                <p>Artigos e referências relevantes coletados</p>
+            </div>
+            <div class="flow-step">
+                <div class="step-number">5</div>
+                <h4>Curação</h4>
+                <p>Informação limpa, validada e organizada</p>
+            </div>
+            <div class="flow-step">
+                <div class="step-number">6</div>
+                <h4>Armazenamento</h4>
+                <p>Resultados curados guardados para consulta</p>
+            </div>
+            <div class="flow-step">
+                <div class="step-number">7</div>
+                <h4>Notificação</h4>
+                <p>Cliente informado que resultados estão prontos</p>
+            </div>
+            <div class="flow-step">
+                <div class="step-number">8</div>
+                <h4>Acesso MCP</h4>
+                <p>Informação consultada através interface MCP</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Section -->
+    <section class="section" id="value">
+        <h2 class="section-title">Valor Entregue ao Cliente</h2>
+        <p class="section-subtitle">O que você ganha ao adotar esta solução</p>
+        <div class="value-grid">
+            <div class="value-item">
+                <h4>🚀 Velocidade</h4>
+                <p>Requisições são aceitas imediatamente, sem espera pelo ciclo completo</p>
+            </div>
+            <div class="value-item">
+                <h4>🎯 Clareza</h4>
+                <p>Cliente sabe exatamente quando a informação estará disponível</p>
+            </div>
+            <div class="value-item">
+                <h4>✅ Qualidade</h4>
+                <p>Resultados curados em vez de simplesmente repassados</p>
+            </div>
+            <div class="value-item">
+                <h4>📊 Consistência</h4>
+                <p>Informação armazenada e exposta em formato estruturado</p>
+            </div>
+            <div class="value-item">
+                <h4>📈 Escalabilidade</h4>
+                <p>Plataforma evolui conforme o uso cresce</p>
+            </div>
+            <div class="value-item">
+                <h4>🔮 Futuro Preparado</h4>
+                <p>Exposição MCP permite cenários de consumo inteligente</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section">
+        <div class="cta-section" id="contact">
+            <h2>Pronto para Transformar Sua Busca de Informação?</h2>
+            <p>Comece a usar a Internet Search API hoje e descubra o poder de um serviço de informação gerenciado</p>
+            <a href="mailto:contacto@example.com" class="btn btn-primary">Contactar Agora</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#capabilities">Capacidades</a>
+                <a href="#architecture">Arquitetura</a>
+                <a href="#flow">Fluxo</a>
+                <a href="#value">Valor</a>
+                <a href="https://github.com/geovasconcelos/hugo-leal-internet-search-api-homepage">GitHub</a>
+                <a href="index.html">English 🇬🇧</a>
+            </div>
+            <p class="footer-credit">Internet Search API © 2024. Arquitetura profissional para serviços de informação.</p>
+        </div>
+    </footer>
+</body>
+</html>

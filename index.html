@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Internet Search API - Serviço de Busca Gerenciada</title>
+    <title>Internet Search API - Managed Information Service</title>
     <style>
         * {
             margin: 0;
@@ -89,6 +89,22 @@
 
         .nav-button:hover {
             background: var(--primary-dark);
+        }
+
+        .lang-switch {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-decoration: none;
+            margin-left: 1rem;
+            padding: 0.4rem 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: 0.4rem;
+            transition: all 0.2s ease;
+        }
+
+        .lang-switch:hover {
+            border-color: var(--primary);
+            color: var(--primary);
         }
 
         .hero {
@@ -284,6 +300,47 @@
             font-size: 0.95rem;
         }
 
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .security-card {
+            padding: 2rem;
+            background: var(--bg-light);
+            border-radius: 0.75rem;
+        }
+
+        .security-card h4 {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .security-card ul {
+            list-style: none;
+        }
+
+        .security-card li {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            padding: 0.4rem 0;
+            padding-left: 1.25rem;
+            position: relative;
+        }
+
+        .security-card li::before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
         .value-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -399,12 +456,16 @@
         <nav>
             <a href="#" class="logo">🔍 Search API</a>
             <ul class="nav-links">
-                <li><a href="#capabilities">Capacidades</a></li>
-                <li><a href="#architecture">Arquitetura</a></li>
-                <li><a href="#flow">Fluxo</a></li>
-                <li><a href="#value">Valor</a></li>
+                <li><a href="#capabilities">Capabilities</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#flow">Service Flow</a></li>
+                <li><a href="#security">Security</a></li>
+                <li><a href="#value">Value</a></li>
             </ul>
-            <a href="#contact" class="nav-button">Contactar</a>
+            <div style="display: flex; align-items: center;">
+                <a href="#contact" class="nav-button">Get in Touch</a>
+                <a href="index-pt.html" class="lang-switch">PT 🇵🇹</a>
+            </div>
         </nav>
     </header>
 
@@ -412,170 +473,306 @@
     <section class="hero">
         <div class="hero-content">
             <h1>Internet Search API</h1>
-            <p>Transforme buscas simples num serviço de informação gerenciada, confiável e reutilizável</p>
+            <p>Transforming a simple search request into a managed information service — reliable, reusable, and ready for intelligent integration.</p>
             <div class="hero-buttons">
-                <a href="#capabilities" class="btn btn-primary">Saiba Mais</a>
-                <a href="#contact" class="btn btn-secondary">Começar</a>
+                <a href="#capabilities" class="btn btn-primary">Learn More</a>
+                <a href="#contact" class="btn btn-secondary">Get Started</a>
             </div>
         </div>
     </section>
 
-    <!-- Capabilities Section -->
-    <section class="section" id="capabilities">
-        <h2 class="section-title">Capacidades Principais</h2>
-        <p class="section-subtitle">Tudo o que você precisa para gerenciar buscas de informação de forma profissional</p>
+    <!-- Business Objective -->
+    <section class="section" id="objective">
+        <h2 class="section-title">Business Objective</h2>
+        <p class="section-subtitle">
+            The purpose of this solution is to transform a simple search request into a managed information service.
+        </p>
         <div class="capabilities-grid">
             <div class="capability-card">
-                <div class="capability-icon">⚡</div>
-                <h3>Resposta Rápida</h3>
-                <p>Aceite requisições imediatamente, sem forçar o cliente a esperar pelo ciclo completo de pesquisa.</p>
+                <div class="capability-icon">🎯</div>
+                <h3>1. Understand Intent</h3>
+                <p>Receive and understand the search intent behind every request.</p>
             </div>
             <div class="capability-card">
-                <div class="capability-icon">🔄</div>
-                <h3>Processamento em Background</h3>
-                <p>A busca e preparação acontecem de forma assíncrona, mantendo a plataforma sempre responsiva.</p>
+                <div class="capability-icon">✅</div>
+                <h3>2. Confirm Acceptance</h3>
+                <p>Confirm that the request has been accepted, without delay.</p>
             </div>
             <div class="capability-card">
-                <div class="capability-icon">✨</div>
-                <h3>Resultados Curados</h3>
-                <p>Não retornamos apenas resultados brutos. Aplicamos validação, organização e classificação.</p>
+                <div class="capability-icon">🌐</div>
+                <h3>3. Search Sources</h3>
+                <p>Search relevant public web sources for the requested information.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">🗂️</div>
+                <h3>4. Filter & Organize</h3>
+                <p>Filter and organize the collected content into a coherent result set.</p>
             </div>
             <div class="capability-card">
                 <div class="capability-icon">💾</div>
-                <h3>Informação Reutilizável</h3>
-                <p>Os resultados são armazenados e consultáveis depois, evitando repetição desnecessária.</p>
+                <h3>5. Store for Later</h3>
+                <p>Store the validated information for later use, reuse, and audit.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">🔔</div>
+                <h3>6. Notify Readiness</h3>
+                <p>Inform the client when the information is ready for consultation.</p>
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: 2rem; color: var(--text-light); max-width: 700px; margin-left: auto; margin-right: auto;">
+            Plus structured consultation of the stored information through MCP — making the service suitable not only for immediate use, but also for reuse, auditability, and integration with other digital channels.
+        </p>
+    </section>
+
+    <!-- What You Can Expect -->
+    <section class="section architecture-section" id="capabilities">
+        <h2 class="section-title">What You Can Expect</h2>
+        <p class="section-subtitle">Built for speed, reliability, and quality — from request to structured result</p>
+        <div class="capabilities-grid">
+            <div class="capability-card">
+                <div class="capability-icon">⚡</div>
+                <h3>Fast Response to New Requests</h3>
+                <p>The platform is designed to acknowledge receipt of a search request immediately, without forcing the client to wait for the full internet research cycle.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">🔄</div>
+                <h3>Reliable Background Processing</h3>
+                <p>The actual search and information preparation take place asynchronously in the background, allowing the platform to remain responsive even when external web sources are slower.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">✨</div>
+                <h3>Curated Results, Not Raw Output</h3>
+                <p>The solution does not simply return unfiltered search results. It applies validation, organization, and classification for a more useful, consistent output.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">💾</div>
+                <h3>Reusable & Consultable Information</h3>
+                <p>Once processing is complete, curated information is stored and can be consulted again later, avoiding unnecessary repetition and improving efficiency.</p>
             </div>
             <div class="capability-card">
                 <div class="capability-icon">🔌</div>
-                <h3>Acesso Estruturado via MCP</h3>
-                <p>Exponha resultados através de uma interface MCP para consumo por sistemas inteligentes.</p>
+                <h3>Structured Access Through MCP</h3>
+                <p>The final information is exposed through an MCP interface, enabling intelligent systems and downstream consumers to query stored results consistently.</p>
             </div>
             <div class="capability-card">
                 <div class="capability-icon">📈</div>
-                <h3>Escalável</h3>
-                <p>Arquitetura desenhada para crescer conforme a procura por informação aumenta.</p>
+                <h3>Built to Scale</h3>
+                <p>The search workload can grow independently from the client-facing entry point as demand increases.</p>
             </div>
         </div>
     </section>
 
-    <!-- Architecture Section -->
-    <section class="section architecture-section" id="architecture">
-        <h2 class="section-title">Princípios de Arquitetura</h2>
-        <p class="section-subtitle">Construída sobre princípios comprovados de design empresarial</p>
+    <!-- High-Level Architecture -->
+    <section class="section" id="architecture">
+        <h2 class="section-title">High-Level Architecture</h2>
+        <p class="section-subtitle">
+            "Accept quickly, process carefully, store reliably, and expose clearly."
+        </p>
+        <div class="capabilities-grid">
+            <div class="capability-card">
+                <div class="capability-icon">1️⃣</div>
+                <h3>Client Access</h3>
+                <p>The entry point used by the client application or business consumer — submit requests, receive acknowledgement and notifications, and consult results.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">2️⃣</div>
+                <h3>Search API</h3>
+                <p>The front door of the platform — receives, validates, and standardizes each request, confirming acceptance immediately.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">3️⃣</div>
+                <h3>Processing Orchestration</h3>
+                <p>Moves requests into background processing, protecting the platform from delays and supporting scalability as demand grows.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">4️⃣</div>
+                <h3>Internet Search & Content Preparation</h3>
+                <p>Performs the actual research and refinement — searching, deduplicating, validating, and classifying content into a curated result set.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">5️⃣</div>
+                <h3>Information Repository</h3>
+                <p>The long-term knowledge store — keeps requests and results, preserves traceability, and supports consultation and reporting.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">6️⃣</div>
+                <h3>Notification Capability</h3>
+                <p>Informs interested consumers when requested information becomes available, avoiding constant manual status checking.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">7️⃣</div>
+                <h3>MCP Access Layer</h3>
+                <p>Exposes curated information in a structured way, enabling reuse by AI-enabled or MCP-compatible consumers.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Principles -->
+    <section class="section architecture-section">
+        <h2 class="section-title">Architecture Principles</h2>
+        <p class="section-subtitle">Well-established principles appropriate for client-facing enterprise platforms</p>
         <div class="principles-grid">
             <div class="principle">
-                <h4>Separação de Responsabilidades</h4>
-                <p>Cada capacidade tem um papel claro: receber requisições, processar informação, armazenar resultados, notificar usuários.</p>
+                <h4>Separation of Responsibilities</h4>
+                <p>Each major capability has a clear role: receiving requests, processing information, storing results, notifying users, and exposing curated data.</p>
             </div>
             <div class="principle">
-                <h4>Responsividade</h4>
-                <p>A plataforma responde rapidamente no início, enquanto atividades mais complexas ocorrem em background.</p>
+                <h4>Responsiveness</h4>
+                <p>The platform answers quickly at the start of the process, while the more time-consuming research activities happen in the background.</p>
             </div>
             <div class="principle">
-                <h4>Escalabilidade</h4>
-                <p>O design permite que a carga de trabalho cresça independentemente do ponto de entrada para o cliente.</p>
+                <h4>Scalability</h4>
+                <p>The design allows the search workload to grow independently from the client-facing entry point.</p>
             </div>
             <div class="principle">
-                <h4>Resiliência</h4>
-                <p>Fontes externas podem ser lentas ou indisponíveis. A arquitetura reduz o impacto na experiência do cliente.</p>
+                <h4>Resilience</h4>
+                <p>External search providers may be slower or temporarily unavailable. The architecture reduces the impact of those variations on the client experience.</p>
             </div>
             <div class="principle">
-                <h4>Reusabilidade</h4>
-                <p>Informação processada é armazenada e disponibilizada para consulta futura, não descartável.</p>
+                <h4>Reusability</h4>
+                <p>Processed information is stored and made available for later consultation, rather than being treated as a disposable response.</p>
             </div>
             <div class="principle">
-                <h4>Exposição Controlada</h4>
-                <p>A camada MCP oferece acesso governado aos resultados sem acoplar consumidores ao fluxo interno.</p>
+                <h4>Controlled Exposure</h4>
+                <p>The MCP layer provides a clear and governed way to access stored information without coupling consumers to the internal processing flow.</p>
             </div>
         </div>
     </section>
 
-    <!-- Flow Section -->
+    <!-- End-to-End Service Flow -->
     <section class="section flow-section" id="flow">
-        <h2 class="section-title">Fluxo de Serviço End-to-End</h2>
-        <p class="section-subtitle">Como o serviço funciona da perspectiva do cliente</p>
+        <h2 class="section-title">End-to-End Service Flow</h2>
+        <p class="section-subtitle">How the service behaves from the client's point of view</p>
         <div class="flow-steps">
             <div class="flow-step">
                 <div class="step-number">1</div>
-                <h4>Submeter Requisição</h4>
-                <p>Cliente descreve a informação a ser buscada</p>
+                <h4>Submit Request</h4>
+                <p>The client submits a request describing the information to be searched.</p>
             </div>
             <div class="flow-step">
                 <div class="step-number">2</div>
-                <h4>Confirmação</h4>
-                <p>Plataforma revê e confirma aceite imediato</p>
+                <h4>Acceptance</h4>
+                <p>The platform reviews the request and confirms it has been accepted.</p>
             </div>
             <div class="flow-step">
                 <div class="step-number">3</div>
-                <h4>Busca em Background</h4>
-                <p>Pesquisa realizada assincronamente</p>
+                <h4>Background Search</h4>
+                <p>The search is performed asynchronously in the background.</p>
             </div>
             <div class="flow-step">
                 <div class="step-number">4</div>
-                <h4>Recolher Artigos</h4>
-                <p>Artigos e referências relevantes coletados</p>
+                <h4>Collect References</h4>
+                <p>Relevant articles and references are collected.</p>
             </div>
             <div class="flow-step">
                 <div class="step-number">5</div>
-                <h4>Curação</h4>
-                <p>Informação limpa, validada e organizada</p>
+                <h4>Curation</h4>
+                <p>Information is cleaned, checked, and organized.</p>
             </div>
             <div class="flow-step">
                 <div class="step-number">6</div>
-                <h4>Armazenamento</h4>
-                <p>Resultados curados guardados para consulta</p>
+                <h4>Storage</h4>
+                <p>Curated information is stored for consultation.</p>
             </div>
             <div class="flow-step">
                 <div class="step-number">7</div>
-                <h4>Notificação</h4>
-                <p>Cliente informado que resultados estão prontos</p>
+                <h4>Notification</h4>
+                <p>The client is informed that results are available.</p>
             </div>
             <div class="flow-step">
                 <div class="step-number">8</div>
-                <h4>Acesso MCP</h4>
-                <p>Informação consultada através interface MCP</p>
+                <h4>MCP Access</h4>
+                <p>Stored information is accessed through the MCP interface.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security and Governance -->
+    <section class="section" id="security">
+        <h2 class="section-title">Security and Governance</h2>
+        <p class="section-subtitle">Modern architecture best practices, even at a high level</p>
+        <div class="security-grid">
+            <div class="security-card">
+                <h4>🔐 Secure Access</h4>
+                <ul>
+                    <li>Only authorized consumers should be allowed to submit or consult requests</li>
+                    <li>Access should be governed according to the client and business context</li>
+                </ul>
+            </div>
+            <div class="security-card">
+                <h4>🛡️ Data Protection</h4>
+                <ul>
+                    <li>Stored information should be protected appropriately</li>
+                    <li>Sensitive credentials and access secrets must remain controlled</li>
+                    <li>Auditability should be maintained for important actions and lifecycle events</li>
+                </ul>
+            </div>
+            <div class="security-card">
+                <h4>📊 Operational Control</h4>
+                <ul>
+                    <li>The platform should monitor search activity, status, throughput, and failures</li>
+                    <li>Usage controls should prevent abuse and help protect service quality</li>
+                </ul>
+            </div>
+            <div class="security-card">
+                <h4>✅ Quality & Trustworthiness</h4>
+                <ul>
+                    <li>Collected information should be validated and curated before being presented as available business data</li>
+                    <li>Duplicated or low-quality entries should be reduced whenever possible</li>
+                </ul>
             </div>
         </div>
     </section>
 
     <!-- Value Section -->
-    <section class="section" id="value">
-        <h2 class="section-title">Valor Entregue ao Cliente</h2>
-        <p class="section-subtitle">O que você ganha ao adotar esta solução</p>
+    <section class="section architecture-section" id="value">
+        <h2 class="section-title">Value Delivered to the Client</h2>
+        <p class="section-subtitle">What this architecture is intended to deliver</p>
         <div class="value-grid">
             <div class="value-item">
-                <h4>🚀 Velocidade</h4>
-                <p>Requisições são aceitas imediatamente, sem espera pelo ciclo completo</p>
+                <h4>🚀 Speed</h4>
+                <p>Requests are accepted immediately</p>
             </div>
             <div class="value-item">
-                <h4>🎯 Clareza</h4>
-                <p>Cliente sabe exatamente quando a informação estará disponível</p>
+                <h4>🎯 Clarity</h4>
+                <p>The client knows when information is available</p>
             </div>
             <div class="value-item">
-                <h4>✅ Qualidade</h4>
-                <p>Resultados curados em vez de simplesmente repassados</p>
+                <h4>✅ Quality</h4>
+                <p>Results are curated rather than simply forwarded</p>
             </div>
             <div class="value-item">
-                <h4>📊 Consistência</h4>
-                <p>Informação armazenada e exposta em formato estruturado</p>
+                <h4>📊 Consistency</h4>
+                <p>Information is stored and exposed in a structured format</p>
             </div>
             <div class="value-item">
-                <h4>📈 Escalabilidade</h4>
-                <p>Plataforma evolui conforme o uso cresce</p>
+                <h4>📈 Scalability</h4>
+                <p>The platform can evolve as usage grows</p>
             </div>
             <div class="value-item">
-                <h4>🔮 Futuro Preparado</h4>
-                <p>Exposição MCP permite cenários de consumo inteligente</p>
+                <h4>🔮 Future Readiness</h4>
+                <p>MCP exposure enables broader intelligent consumption scenarios</p>
             </div>
         </div>
+    </section>
+
+    <!-- Conclusion -->
+    <section class="section">
+        <h2 class="section-title">Conclusion</h2>
+        <p style="max-width: 800px; margin: 0 auto 2rem; text-align: center; color: var(--text-light); font-size: 1.05rem;">
+            The proposed Internet Search API is more than a simple search endpoint. It is a managed information service designed to receive requests efficiently, perform web research responsibly, organize the resulting content, store it reliably, and make it available through a modern consultation layer.
+        </p>
+        <p style="max-width: 800px; margin: 0 auto; text-align: center; color: var(--text-light); font-size: 1.05rem;">
+            For the client, this means a solution that is easy to understand, fast to interact with, reliable in operation, structured for long-term use, and suitable for integration with intelligent consumers.
+        </p>
     </section>
 
     <!-- CTA Section -->
     <section class="section">
         <div class="cta-section" id="contact">
-            <h2>Pronto para Transformar Sua Busca de Informação?</h2>
-            <p>Comece a usar a Internet Search API hoje e descubra o poder de um serviço de informação gerenciado</p>
-            <a href="mailto:contacto@example.com" class="btn btn-primary">Contactar Agora</a>
+            <h2>Ready to Transform Your Information Search?</h2>
+            <p>Start using the Internet Search API today and discover the power of a managed information service</p>
+            <a href="mailto:contact@example.com" class="btn btn-primary">Get in Touch</a>
         </div>
     </section>
 
@@ -583,13 +780,14 @@
     <footer>
         <div class="footer-content">
             <div class="footer-links">
-                <a href="#capabilities">Capacidades</a>
-                <a href="#architecture">Arquitetura</a>
-                <a href="#flow">Fluxo</a>
-                <a href="#value">Valor</a>
-                <a href="https://github.com">GitHub</a>
+                <a href="#capabilities">Capabilities</a>
+                <a href="#architecture">Architecture</a>
+                <a href="#flow">Service Flow</a>
+                <a href="#security">Security</a>
+                <a href="#value">Value</a>
+                <a href="index-pt.html">Português 🇵🇹</a>
             </div>
-            <p class="footer-credit">Internet Search API © 2024. Arquitetura profissional para serviços de informação.</p>
+            <p class="footer-credit">Internet Search API © 2026. A professional architecture for managed information discovery.</p>
         </div>
     </footer>
 </body>
