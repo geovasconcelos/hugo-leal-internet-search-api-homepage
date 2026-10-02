@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Internet Search API — Client-Facing Architecture Overview</title>
+<title>Internet Article Search Platform — Global Architecture &amp; Overview</title>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <style>
+
   :root {
     --text: #1a1a1a;
     --text-light: #57606a;
@@ -267,358 +268,573 @@
     nav.toc ol { columns: 1; }
     .docbar-inner { font-size: 0.78rem; }
   }
+
+  /* ---- Additions for technical/code-heavy sections ---- */
+  pre.code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.1rem;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin: 0.75rem 0 1.25rem;
+  }
+  pre.ascii-diagram {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    line-height: 1.35;
+    margin: 1rem 0 1.5rem;
+  }
+
+  .module-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .module-card h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1.1rem;
+  }
+  .module-card .field-label {
+    font-weight: 650;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--text-light);
+    margin: 0.9rem 0 0.3rem;
+  }
+  .module-card .field-label:first-of-type { margin-top: 0; }
+  .module-card ul { margin: 0 0 0; }
+  .module-card p.purpose {
+    margin: 0 0 0.25rem;
+    color: var(--text);
+  }
+
+  .checklist { list-style: none; padding-left: 0; }
+  .checklist li { padding-left: 1.6rem; position: relative; }
+  .checklist li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #1a7f37;
+    font-weight: 650;
+  }
+
+  .outcomes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.9rem;
+    margin: 1rem 0 1.5rem;
+  }
+  .outcome-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.85rem 1rem;
+    font-size: 0.92rem;
+  }
+  .outcome-card .outcome-label {
+    font-weight: 650;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
 </style>
 </head>
 <body>
 
   <div class="docbar">
     <div class="docbar-inner">
-      <span>Doc <code>internet-search-api-architecture</code> &middot; v1.1 &middot; Last updated 2026-09-23</span>
-      <span class="docbar-links">
-        <a href="index-pt.html">PT version</a>
-      </span>
+      <span>Doc <code>internet-article-search-platform</code> &middot; v2.0 &middot; Last updated 2026-10-02</span>
     </div>
   </div>
 
   <div class="wrap">
 
     <header class="doc-title">
-      <h1>Internet Search API</h1>
-      <p class="subtitle">Client-Facing Architecture Overview</p>
+      <h1>Internet Article Search Platform</h1>
+      <p class="subtitle">Global Architecture &amp; Overview</p>
     </header>
 
     <nav class="toc" aria-label="Table of contents">
       <div class="toc-label">Contents</div>
       <ol>
-        <li><a href="#objective">Business Objective</a></li>
-        <li><a href="#expect">What You Can Expect</a></li>
-        <li><a href="#architecture">High-Level Architecture</a></li>
-        <li><a href="#principles">Architecture Principles</a></li>
-        <li><a href="#security">Security and Governance</a></li>
-        <li><a href="#flow">End-to-End Service Flow</a></li>
-        <li><a href="#diagrams">Sequence &amp; Context Diagrams</a></li>
-        <li><a href="#limitations">Limitations and Considerations</a></li>
-        <li><a href="#value">Value Delivered</a></li>
-        <li><a href="#next-steps">Next Steps</a></li>
+        <li><a href="#exec-summary">Executive Summary</a></li>
+        <li><a href="#value">Business Value Proposition</a></li>
+        <li><a href="#architecture">Platform Architecture Overview</a></li>
+        <li><a href="#diagrams">System Architecture Diagrams</a></li>
+        <li><a href="#modules">Five-Module Architecture</a></li>
+        <li><a href="#data-model">Data Model</a></li>
+        <li><a href="#tech-stack">Technology Stack Summary</a></li>
         <li><a href="#history">Document History</a></li>
       </ol>
     </nav>
 
-    <section id="objective">
-      <h2>Business Objective</h2>
-      <p>The purpose of this solution is to transform a simple search request into a managed information service.</p>
-      <p>Instead of only executing a one-time internet search, the platform will:</p>
-      <ol>
-        <li><strong>receive and understand the search intent</strong> — immediately</li>
-        <li><strong>confirm that the request has been accepted</strong> — within seconds</li>
-        <li><strong>search relevant public web sources</strong> — asynchronously in the background</li>
-        <li><strong>filter and organize the collected content</strong> — applying validation and classification</li>
-        <li><strong>store the validated information for later use</strong> — for indefinite reuse and audit trails</li>
-        <li><strong>inform the client when the information is ready</strong> — via automated notification</li>
-        <li><strong>allow structured consultation of the stored information through MCP</strong> — enabling downstream integration</li>
-      </ol>
-      <p>This makes the service suitable not only for immediate use, but also for reuse, auditability, and integration with other digital channels.</p>
-    </section>
-
-    <section id="expect">
-      <h2>What You Can Expect</h2>
-
-      <h3>Fast Response to New Requests</h3>
-      <p>The platform is designed to acknowledge receipt of a search request immediately — within seconds — without forcing the client to wait for the full internet research cycle.</p>
-
-      <h3>Reliable Background Processing</h3>
-      <p>The actual search and information preparation take place asynchronously in the background, allowing the platform to remain responsive even when external web sources are slower or temporarily unavailable.</p>
-
-      <h3>Curated Results Instead of Raw Web Output</h3>
-      <p>The solution does not simply return unfiltered search results. It applies validation, organization, and classification so that the final output is more useful, more consistent, and easier to consume.</p>
-
-      <h3>Reusable and Consultable Information</h3>
-      <p>The curated information is stored and can be consulted multiple times later, avoiding unnecessary repetition and improving operational efficiency and return on investment for each search request.</p>
-
-      <h3>Structured Access Through MCP</h3>
-      <p>The final information is exposed through an MCP interface, enabling intelligent systems and downstream consumers to query the stored results in a consistent and structured way.</p>
-
-      <h3>Expected Performance Characteristics</h3>
-      <table>
-        <thead><tr><th>Metric</th><th>Target</th></tr></thead>
-        <tbody>
-          <tr><td>Request acknowledgment</td><td>&lt; 1 second</td></tr>
-          <tr><td>Full research completion</td><td>5–15 minutes (depends on query complexity and source availability)</td></tr>
-          <tr><td>Result storage</td><td>Indefinite, with versioning and audit trail support</td></tr>
-          <tr><td>MCP query response</td><td>&lt; 500 ms for indexed results</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <section id="architecture">
-      <h2>High-Level Architecture</h2>
-      <blockquote>Accept quickly, process carefully, store reliably, and expose clearly.</blockquote>
-      <p>At a high level, the platform includes the following business capabilities:</p>
-
-      <ul class="component-list">
-        <li>
-          <span class="comp-title">Client Access</span>
-          The entry point used by the client application or business consumer.
-          <ul>
-            <li>Submit search requests</li>
-            <li>Receive immediate acknowledgment</li>
-            <li>Receive notification when results are available</li>
-            <li>Consult available results</li>
-          </ul>
-        </li>
-        <li>
-          <span class="comp-title">Search API</span>
-          The front door of the platform.
-          <ul>
-            <li>Receive the request</li>
-            <li>Validate that the request is acceptable</li>
-            <li>Organize the request into a standard internal format</li>
-            <li>Confirm acceptance immediately</li>
-          </ul>
-        </li>
-        <li>
-          <span class="comp-title">Processing Orchestration</span>
-          Ensures the request is handled in a controlled and scalable way.
-          <ul>
-            <li>Move the request into background processing</li>
-            <li>Protect the platform from delays caused by external sources</li>
-            <li>Support scalability as demand grows</li>
-          </ul>
-        </li>
-        <li>
-          <span class="comp-title">Internet Search &amp; Content Preparation</span>
-          Performs the actual research and information refinement.
-          <ul>
-            <li>Search external web sources</li>
-            <li>Collect relevant articles and references</li>
-            <li>Remove duplicate information</li>
-            <li>Validate and classify content</li>
-            <li>Prepare a curated result set</li>
-          </ul>
-        </li>
-        <li>
-          <span class="comp-title">Information Repository</span>
-          The long-term knowledge store of the solution.
-          <ul>
-            <li>Keep the accepted requests</li>
-            <li>Keep the processed results</li>
-            <li>Preserve traceability and historical visibility</li>
-            <li>Support consultation and reporting</li>
-            <li>Maintain version history for audit compliance</li>
-          </ul>
-        </li>
-        <li>
-          <span class="comp-title">Notification Capability</span>
-          Informs interested consumers when the requested information becomes available.
-          <ul>
-            <li>Communicate completion</li>
-            <li>Improve the end-user experience</li>
-            <li>Avoid constant manual status checking</li>
-          </ul>
-        </li>
-        <li>
-          <span class="comp-title">MCP Access Layer</span>
-          Exposes the curated information in a structured way for intelligent consumers.
-          <ul>
-            <li>Provide controlled access to stored search results</li>
-            <li>Enable reuse of the information by AI-enabled or MCP-compatible consumers</li>
-            <li>Separate information consumption from information collection</li>
-            <li>Support programmatic integration with downstream systems</li>
-          </ul>
-        </li>
-      </ul>
-    </section>
-
-    <section id="principles">
-      <h2>Architecture Principles</h2>
-      <div class="principles-grid">
-        <div class="principle-card">
-          <h4>Separation of Responsibilities</h4>
-          <p>Each major capability has a clear role: receiving requests, processing information, storing results, notifying users, and exposing curated data.</p>
-        </div>
-        <div class="principle-card">
-          <h4>Responsiveness</h4>
-          <p>The platform answers quickly at the start of the process, while the more time-consuming research activities happen in the background.</p>
-        </div>
-        <div class="principle-card">
-          <h4>Scalability</h4>
-          <p>The design allows the search workload to grow independently from the client-facing entry point.</p>
-        </div>
-        <div class="principle-card">
-          <h4>Resilience</h4>
-          <p>External search providers may be slower or temporarily unavailable. The architecture reduces the impact of those variations on the client experience.</p>
-        </div>
-        <div class="principle-card">
-          <h4>Reusability</h4>
-          <p>Processed information is stored and made available for later consultation, rather than being treated as a disposable response.</p>
-        </div>
-        <div class="principle-card">
-          <h4>Controlled Exposure</h4>
-          <p>The MCP layer provides a clear and governed way to access stored information without coupling consumers to the internal processing flow.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="security">
-      <h2>Security and Governance Considerations</h2>
-      <p>Although this document is intentionally high-level, the solution is expected to follow modern architecture best practices in the following areas:</p>
-      <div class="security-grid">
-        <div class="security-card">
-          <h4>Access Control</h4>
-          <ul>
-            <li>Only authorized consumers should be allowed to submit or consult requests</li>
-            <li>Access should be governed according to the client and business context</li>
-            <li>Rate limiting and quota management should prevent abuse</li>
-          </ul>
-        </div>
-        <div class="security-card">
-          <h4>Data Protection</h4>
-          <ul>
-            <li>Stored information should be protected appropriately according to classification levels</li>
-            <li>Sensitive credentials and access secrets must remain controlled and never exposed</li>
-            <li>Auditability should be maintained for all important lifecycle events (create, access, delete)</li>
-          </ul>
-        </div>
-        <div class="security-card">
-          <h4>Operational Monitoring</h4>
-          <ul>
-            <li>The platform should monitor search activity, status, throughput, and failure rates in real time</li>
-            <li>Usage controls should prevent abuse and help protect service quality</li>
-            <li>Alerts should notify operators of anomalies or capacity concerns</li>
-          </ul>
-        </div>
-        <div class="security-card">
-          <h4>Data Quality and Trust</h4>
-          <ul>
-            <li>Collected information must be validated before being marked as available business data</li>
-            <li>Duplicated or low-quality entries should be minimized whenever possible</li>
-            <li>Source tracking should be maintained so consumers understand information provenance</li>
-            <li>Version history should be preserved for compliance and audit trails</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section id="flow">
-      <h2>End-to-End Service Flow</h2>
-      <p>From the client point of view, the service behaves as follows:</p>
-      <ol class="flow-steps">
-        <li><span class="step-n">1</span><br>A client submits a request describing the information to be searched.</li>
-        <li><span class="step-n">2</span><br>The platform reviews the request and confirms that it has been accepted.</li>
-        <li><span class="step-n">3</span><br>The search is performed in the background.</li>
-        <li><span class="step-n">4</span><br>Relevant articles and references are collected.</li>
-        <li><span class="step-n">5</span><br>The collected information is cleaned, checked, and organized.</li>
-        <li><span class="step-n">6</span><br>The curated information is stored for consultation.</li>
-        <li><span class="step-n">7</span><br>The client is informed that the results are available.</li>
-        <li><span class="step-n">8</span><br>The stored information can then be accessed through the MCP interface.</li>
-      </ol>
-
-      <h3>Expected Outcomes</h3>
+    <section id="exec-summary">
+      <h2>Executive Summary</h2>
+      <p>This document presents a <strong>continuous internet article monitoring and deduplication platform</strong> designed to automatically discover, organize, and store relevant web articles by topic.</p>
+      <h3>Key Capabilities</h3>
       <ul>
-        <li><strong>Acknowledgment within seconds</strong> — clients receive immediate confirmation that their request has been accepted</li>
-        <li><strong>Curated results within 5–15 minutes</strong> — research is completed and organized without client wait time</li>
-        <li><strong>Indefinite reusability</strong> — information is stored and can be consulted multiple times without re-searching</li>
-        <li><strong>Straightforward integration</strong> — downstream systems can consume results programmatically via MCP</li>
-      </ul>
-    </section>
-
-    <section id="diagrams">
-      <h2>Sequence and Context Diagrams</h2>
-
-      <div class="diagram-block">
-        <pre class="mermaid">
-sequenceDiagram
-	autonumber
-	participant Client as Client
-	participant API as Search API
-	participant Processing as Background Processing
-	participant Sources as External Web Sources
-	participant Repository as Information Repository
-	participant Notify as Notification Service
-	participant MCP as MCP Access Layer
-
-	Client->>API: Submit search request
-	Note over API: Immediate processing
-	API-->>Client: Request accepted (< 1s)
-	API->>Processing: Start async handling
-	Note over Processing: 5-15 minutes
-	Processing->>Sources: Search public sources
-	Sources-->>Processing: Return collected information
-	Processing->>Processing: Validate, organize & classify
-	Processing->>Repository: Store curated results
-	Processing->>Notify: Publish completion event
-	Notify-->>Client: Information is available
-	Client->>MCP: Query stored information
-	MCP->>Repository: Retrieve curated results
-	Repository-->>MCP: Return structured data
-	MCP-->>Client: Present available information
-        </pre>
-        <div class="diagram-caption">Sequence diagram — end-to-end request lifecycle</div>
-      </div>
-
-      <div class="diagram-block">
-        <pre class="mermaid">
-flowchart LR
-	Client[Client Application or Business Consumer]
-	API[Search API]
-	Processing[Background Processing Capability]
-	Sources[External Web Sources]
-	Repository[(Curated Information Repository)]
-	Notify[Notification Capability]
-	MCP[MCP Access Layer]
-
-	Client --> API
-	API --> Processing
-	Processing --> Sources
-	Processing --> Repository
-	Processing --> Notify
-	Client --> MCP
-	MCP --> Repository
-        </pre>
-        <div class="diagram-caption">Context diagram — system boundaries and data flow</div>
-      </div>
-    </section>
-
-    <section id="limitations">
-      <h2>Limitations and Considerations</h2>
-      <p>While the Internet Search API provides significant value, clients should be aware of the following limitations and design constraints:</p>
-      <ul class="limitations-list">
-        <li><strong>Source Dependency</strong> — search quality and completeness depend on the availability and comprehensiveness of the public sources being queried. Source unavailability or changes in source structure may impact results.</li>
-        <li><strong>Information Freshness</strong> — results reflect the state of information at the time of the query. If the information landscape changes afterward, a new search is required to obtain updated results.</li>
-        <li><strong>Coverage Variability</strong> — not all information types or sources are equally comprehensive across all domains. Specialized or niche topics may have limited coverage in public sources.</li>
-        <li><strong>Data Governance and Privacy</strong> — search queries and results are stored in the repository for audit and reuse purposes. Appropriate data governance policies must be in place to protect sensitive information and comply with applicable regulations.</li>
-        <li><strong>Operational Costs</strong> — background processing, storage, and MCP access have operational costs that scale with usage volume and query complexity. Usage patterns should be monitored and appropriate quotas set.</li>
-        <li><strong>Search Complexity</strong> — extremely broad or complex search queries may produce very large result sets. Scope and filtering should be used to keep results manageable and relevant.</li>
+        <li>Automated continuous monitoring of configured topics</li>
+        <li>Intelligent deduplication (4-layer strategy)</li>
+        <li>Structured storage with audit trails</li>
+        <li>Query access through MCP interface</li>
+        <li>Production-ready architecture</li>
       </ul>
     </section>
 
     <section id="value">
-      <h2>Value Delivered</h2>
-      <table>
-        <thead><tr><th>Dimension</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td>Speed</td><td>Requests are accepted immediately; clients are never blocked by external sources.</td></tr>
-          <tr><td>Clarity</td><td>The client knows exactly when information is available and can plan downstream processes accordingly.</td></tr>
-          <tr><td>Quality</td><td>Results are curated and validated rather than simply forwarded from web search engines.</td></tr>
-          <tr><td>Consistency</td><td>Information is stored and exposed in a structured, queryable format.</td></tr>
-          <tr><td>Reusability</td><td>Information can be consulted multiple times without re-searching, improving ROI.</td></tr>
-          <tr><td>Scalability</td><td>The platform can evolve as usage grows; capacity is independent of client growth.</td></tr>
-          <tr><td>Integration</td><td>MCP exposure enables broader intelligent consumption scenarios and downstream automation.</td></tr>
-          <tr><td>Auditability</td><td>Full lifecycle tracking and version history support compliance and governance needs.</td></tr>
-        </tbody>
-      </table>
+      <h2>Business Value Proposition</h2>
+
+      <h3>Problem Addressed</h3>
+      <p>Organizations need to stay informed about topics relevant to their business, but manual web searches are:</p>
+      <ul>
+        <li><strong>Time-consuming</strong> — requires manual effort and repetition</li>
+        <li><strong>Error-prone</strong> — duplicates and outdated content mixed with relevant information</li>
+        <li><strong>Difficult to track</strong> — no organized repository of discovered information</li>
+        <li><strong>Not scalable</strong> — manual process doesn't grow with organization needs</li>
+      </ul>
+
+      <h3>Solution Delivered</h3>
+      <p>A fully automated platform that:</p>
+      <ul class="checklist">
+        <li><strong>Discovers</strong> new relevant articles 24/7 without manual intervention</li>
+        <li><strong>Deduplicates</strong> intelligently to prevent information pollution</li>
+        <li><strong>Organizes</strong> articles by topic with full metadata</li>
+        <li><strong>Preserves</strong> complete audit trail for compliance</li>
+        <li><strong>Exposes</strong> curated information through structured API (MCP)</li>
+      </ul>
+
+      <h3>Business Outcomes</h3>
+      <div class="outcomes-grid">
+        <div class="outcome-card"><span class="outcome-label">Faster decision-making</span>Always have latest information on monitored topics</div>
+        <div class="outcome-card"><span class="outcome-label">Higher data quality</span>Intelligent deduplication reduces noise</div>
+        <div class="outcome-card"><span class="outcome-label">Cost reduction</span>Automation replaces manual research</div>
+        <div class="outcome-card"><span class="outcome-label">Compliance</span>Complete audit trail and version history</div>
+        <div class="outcome-card"><span class="outcome-label">Scalability</span>System grows without proportional effort increase</div>
+      </div>
     </section>
 
-    <section id="next-steps">
-      <h2>Next Steps</h2>
-      <p>To operationalize or extend the Internet Search API:</p>
-      <ol>
-        <li><strong>Define Requirements</strong> — clarify specific information needs, search domains, and use cases; establish priorities and success criteria.</li>
-        <li><strong>Evaluate Sources</strong> — assess source reliability, coverage, update frequency, and access policies for the relevant domain.</li>
-        <li><strong>Design Integration</strong> — plan how downstream systems and stakeholders will consume results via the MCP interface; define data formats and access patterns.</li>
-        <li><strong>Prototype</strong> — validate the architecture and key assumptions about source quality and research time on a focused search domain.</li>
-        <li><strong>Scale</strong> — monitor performance, adoption, and operational costs; expand based on actual usage patterns and demand.</li>
-      </ol>
+    <section id="architecture">
+      <h2>Platform Architecture Overview</h2>
+      <p>The platform is built on a <strong>hybrid synchronous-asynchronous architecture</strong> with clear separation of concerns:</p>
+
+      <h3>Core Components</h3>
+      <pre class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                        TOPIC CONFIGURATION LAYER                        │
+│ - Define what topics to monitor                                         │
+│ - Set update frequency and preferences                                  │
+└────────────────────────────────────┬────────────────────────────────────┘
+                                     │
+┌────────────────────────────────────┴────────────────────────────────────┐
+│                   AUTOMATED SEARCH & PROCESSING LAYER                   │
+│ - Scheduler triggers searches on configured intervals                   │
+│ - External providers (Serper.dev) supply raw results                    │
+│ - Results normalized and standardized                                   │
+└────────────────────────────────────┬────────────────────────────────────┘
+                                     │
+┌────────────────────────────────────┴────────────────────────────────────┐
+│                        INTELLIGENT DEDUPLICATION                        │
+│ - Deduplication strategy                                                │
+│ - Quality validation and relevance scoring                              │
+└────────────────────────────────────┬────────────────────────────────────┘
+                                     │
+┌────────────────────────────────────┴────────────────────────────────────┐
+│                        PERSISTENCE & AUDIT LAYER                        │
+│ - MongoDB stores articles, topics, processing logs                      │
+│ - TTL-based automatic cleanup of old data                               │
+└────────────────────────────────────┬────────────────────────────────────┘
+                                     │
+┌────────────────────────────────────┴────────────────────────────────────┐
+│                        QUERY & CONSUMPTION LAYER                        │
+│ - MCP Server exposes curated information                                │
+└─────────────────────────────────────────────────────────────────────────┘</pre>
+      <p style="font-size:0.85rem;color:var(--text-light);margin-top:-0.5rem;">Connector alignment corrected from the source document for consistent monospace rendering.</p>
+    </section>
+
+    <section id="diagrams">
+      <h2>System Architecture Diagrams</h2>
+
+      <h3>Context Diagram</h3>
+      <div class="diagram-block">
+        <pre class="mermaid">
+graph LR
+    A["Administrator"] -->|Configure Topics| B["Topic Manager"]
+    B -->|Store Config| DB[(MongoDB)]
+
+    C["Scheduler"] -->|Trigger| D["Search &amp; Processing Worker"]
+    C -->|Read Config| DB
+
+    D -->|Search| E["Serper.dev Search Provider"]
+    E -->|Results| D
+
+    D -->|Deduplicate| F["Deduplication Engine"]
+    F -->|Query| DB
+    F -->|Result| D
+
+    D -->|Persist| DB
+    D -->|Notify| G["Notification Service"]
+
+    H["MCP Server"] -->|Query| DB
+    I["Client Systems / AI Assistants"] -->|Read API| H
+        </pre>
+        <div class="diagram-caption">Context diagram — actors, components, and data store</div>
+      </div>
+
+      <h3>Sequence Diagram</h3>
+      <div class="diagram-block">
+        <pre class="mermaid">
+sequenceDiagram
+    participant Admin as Administrator
+    participant API as API
+    participant Sched as Scheduler
+    participant Search as Search Worker
+    participant Provider as Serper.dev
+    participant Dedup as Dedup Engine
+    participant DB as MongoDB
+    participant MCP as MCP Server
+    participant Client as Client Systems
+
+    Admin->>API: 1. Create Topic (Keywords, Frequency)
+    API->>DB: Store Topic Config
+
+    loop Every 6 hours (or configured frequency)
+        Sched->>Search: 2. Trigger Search for Topic
+        Search->>Provider: 3. Search Articles
+        Provider-->>Search: 4. Return Results (JSON)
+
+        loop For Each Article
+            Search->>Dedup: 5. Check for Duplicates
+            Dedup->>DB: Query Existing Articles
+            DB-->>Dedup: Existing Data
+
+            alt Article is Novel
+                Dedup-->>Search: Novel Confirmed
+                Search->>Search: 6. Enrich &amp; Validate
+                Search->>DB: 7. Persist Article
+            else Article is Duplicate
+                Dedup-->>Search: Duplicate Detected
+                Search->>DB: Log Deduplication Evidence
+            end
+        end
+
+        Search->>DB: 8. Log Execution Stats
+    end
+
+    Client->>MCP: 9. Query Articles by Topic
+    MCP->>DB: Retrieve Curated Results
+    DB-->>MCP: Articles with Metadata
+    MCP-->>Client: 10. Return Structured Data
+        </pre>
+        <div class="diagram-caption">Sequence diagram — scheduled discovery and on-demand query lifecycle</div>
+      </div>
+    </section>
+
+    <section id="modules">
+      <h2>Five-Module Architecture</h2>
+      <div class="module-card">
+        <h3>Module 1 — Topic Configuration Manager</h3>
+        <p class="purpose"><strong>Purpose:</strong> Allow administrators to define and manage monitored topics</p>
+
+        <div class="field-label">Responsibilities</div>
+        <ul>
+          <li>CRUD operations for topics (create, read, update, delete)</li>
+          <li>Store topic preferences (keywords, language, region)</li>
+          <li>Enable/disable topics without code changes</li>
+        </ul>
+
+        <div class="field-label">Interaction Pattern</div>
+        <ul>
+          <li>REST API endpoint: <code>/api/topics</code></li>
+          <li>Configuration persisted to MongoDB</li>
+          <li>Cached in-memory for performance</li>
+        </ul>
+
+        <div class="field-label">Technology Stack</div>
+        <ul>
+          <li>Quarkus REST framework</li>
+          <li>MongoDB Panache ORM</li>
+        </ul>
+
+        <div class="field-label">Value Delivered</div>
+        <ul>
+          <li>No development effort to add new topics</li>
+          <li>Real-time enable/disable capability</li>
+        </ul>
+
+        <div class="field-label">Example Topic Configuration Payload</div>
+        <pre class="code-block">{
+  "_id": ObjectId(),
+  "name": "AI News",
+  "keywords": ["AI", "machine learning"],
+  "language": "en",
+  "region": "US",
+  "updateFrequency": "6h",
+  "lastSearchTime": ISODate(),
+  "lastSuccessTime": ISODate(),
+  "active": true,
+  "createdAt": ISODate(),
+  "updatedAt": ISODate()
+}</pre>
+      </div>
+
+      <div class="module-card">
+        <h3>Module 2 — Search Provider Adapter</h3>
+        <p class="purpose"><strong>Purpose:</strong> Abstract external search provider integration</p>
+
+        <div class="field-label">Responsibilities</div>
+        <ul>
+          <li>Call external search provider (Serper.dev)</li>
+          <li>Transform raw results to canonical format</li>
+          <li>Handle provider failures with retry/fallback</li>
+          <li>Rate limiting and timeout management</li>
+        </ul>
+
+        <div class="field-label">Technology Stack</div>
+        <ul>
+          <li>Quarkus REST framework</li>
+          <li>Jackson JSON processing</li>
+          <li>Resilience4j (retry/circuit breaker)</li>
+          <li>Secret Manager (API key storage)</li>
+        </ul>
+
+        <div class="field-label">Value Delivered</div>
+        <ul>
+          <li>Automatic failure handling</li>
+          <li>Secure credential management</li>
+        </ul>
+
+        <div class="field-label">Serper.dev Details</div>
+        <p>Estimated cost: <strong>$80/month for 100k searches</strong></p>
+
+        <p style="margin-bottom:0.3rem;">Request payload:</p>
+        <pre class="code-block">{
+  "q": "quarkus pipeline reactive",
+  "gl": "pt",
+  "hl": "pt",
+  "num": 10,
+  "page": 1,
+  "autocorrect": true
+}</pre>
+
+        <p style="margin-bottom:0.3rem;">Response payload:</p>
+        <pre class="code-block">{
+  "searchParameters": {
+    "q": "quarkus pipeline reactive",
+    "gl": "pt",
+    "hl": "pt",
+    "num": 10,
+    "page": 1,
+    "type": "search"
+  },
+  "knowledgeGraph": {
+    "title": "Quarkus",
+    "type": "Framework de software",
+    "description": "Quarkus e um framework Java nativo do Kubernetes...",
+    "descriptionSource": "Wikipedia"
+  },
+  "organic": [
+    {
+      "title": "Getting Started with Reactive - Quarkus",
+      "link": "https://quarkus.io",
+      "snippet": "Learn how to write reactive applications with Quarkus and Mutiny.",
+      "position": 1
+    },
+    {
+      "title": "Quarkus Reactive Pipeline Tutorial",
+      "link": "https://exemplo.com",
+      "snippet": "Um guia passo a passo sobre Uni, Multi e pipelines nao bloqueantes.",
+      "position": 2
+    }
+  ],
+  "peopleAlsoAsk": [
+    {
+      "question": "O que e Mutiny no Quarkus?",
+      "snippet": "Mutiny e uma biblioteca reativa orientada a eventos utilizada pelo Quarkus...",
+      "title": "Documentacao do SmallRye Mutiny",
+      "link": "https://smallrye.io"
+    }
+  ],
+  "relatedSearches": [
+    { "query": "quarkus mutiny vs rxjava" },
+    { "query": "quarkus reactive hibernate" }
+  ]
+}</pre>
+      </div>
+
+      <div class="module-card">
+        <h3>Module 3 — Scheduled Search Orchestrator</h3>
+        <p class="purpose"><strong>Purpose:</strong> Automate search execution without manual intervention</p>
+
+        <div class="field-label">Responsibilities</div>
+        <ul>
+          <li>Schedule searches based on topic frequency</li>
+          <li>Distribute searches throughout day (avoid thundering herd)</li>
+          <li>Orchestrate full processing pipeline</li>
+        </ul>
+
+        <div class="field-label">Interaction Pattern</div>
+        <ul>
+          <li>Quartz Scheduler manages timing (or Kubernetes CronJobs, depending on deployment)</li>
+          <li>One job iterates through all active topics</li>
+          <li>Different cron expressions per topic</li>
+        </ul>
+
+        <div class="field-label">Technology Stack</div>
+        <ul>
+          <li>Quartz Scheduler</li>
+          <li>Topic Configuration Manager</li>
+          <li>Search Provider Adapter</li>
+        </ul>
+
+        <div class="field-label">Value Delivered</div>
+        <ul>
+          <li>Fully automated 24/7 operation</li>
+          <li>No human intervention required</li>
+          <li>Configurable monitoring frequency</li>
+        </ul>
+      </div>
+
+      <div class="module-card">
+        <h3>Module 4 — Intelligent Deduplication Engine</h3>
+        <p class="purpose"><strong>Purpose:</strong> Prevent duplicate/similar content from polluting the knowledge base</p>
+
+        <div class="field-label">Responsibilities</div>
+        <ul>
+          <li>Compare new articles against existing database</li>
+          <li>Use a 4-layer strategy: URL hash &rarr; Bloom filter &rarr; Content hash &rarr; Similarity scoring</li>
+          <li>Flag borderline cases for manual review if needed</li>
+        </ul>
+
+        <div class="field-label">Comparison Strategy (Priority Order)</div>
+        <table>
+          <thead><tr><th>#</th><th>Layer</th><th>Latency</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>URL Matching</td><td>&lt; 1 ms</td><td>Normalize URLs, remove tracking parameters; exact hash comparison; 100% accurate for same URL</td></tr>
+            <tr><td>2</td><td>Bloom Filter</td><td>&lt; 1 ms</td><td>Fast probabilistic check; avoids expensive DB queries; false positive rate &lt; 1%</td></tr>
+            <tr><td>3</td><td>Content Hash</td><td>&lt; 5 ms</td><td>SHA256 of article snippet; detects reposted/mirrored content; high confidence match</td></tr>
+            <tr><td>4</td><td>Similarity Scoring</td><td>50&ndash;100 ms</td><td>TF-IDF based semantic comparison; detects paraphrased versions; only used if first 3 layers pass</td></tr>
+          </tbody>
+        </table>
+
+        <div class="field-label">Technology Stack</div>
+        <ul>
+          <li>Apache Commons Math (similarity algorithms)</li>
+          <li>Guava (Bloom filters)</li>
+        </ul>
+
+        <div class="field-label">Value Delivered</div>
+        <ul>
+          <li>Reduces duplicate content</li>
+          <li>Multiple detection strategies ensure coverage</li>
+        </ul>
+      </div>
+
+      <div class="module-card">
+        <h3>Module 5 — MCP Query Server</h3>
+        <p class="purpose"><strong>Purpose:</strong> Expose curated articles through a structured API</p>
+
+        <div class="field-label">Responsibilities</div>
+        <ul>
+          <li>Provide read-only access to stored articles</li>
+          <li>Support rich filtering (topic, date, relevance, source)</li>
+          <li>Expose topic statistics</li>
+        </ul>
+
+        <div class="field-label">Available Queries</div>
+        <table>
+          <thead><tr><th>Function</th><th>Purpose</th><th>Use Case</th></tr></thead>
+          <tbody>
+            <tr><td><code>list_topics()</code></td><td>Get all monitored topics</td><td>Dashboard view</td></tr>
+            <tr><td><code>search_articles(topic, filters)</code></td><td>Find articles by criteria</td><td>Content discovery</td></tr>
+            <tr><td><code>get_article_details(id)</code></td><td>Full article + dedup evidence</td><td>Detail view</td></tr>
+            <tr><td><code>get_topic_stats(topic)</code></td><td>Statistics per topic</td><td>Performance monitoring</td></tr>
+            <tr><td><code>get_dedup_evidence(article_id)</code></td><td>Why was this a duplicate?</td><td>Audit/compliance</td></tr>
+          </tbody>
+        </table>
+
+        <div class="field-label">Technology Stack</div>
+        <ul>
+          <li>Quarkus REST framework</li>
+          <li>MongoDB aggregation pipeline</li>
+          <li>OpenAPI/Swagger documentation</li>
+          <li>MCP protocol support</li>
+        </ul>
+
+        <div class="field-label">Value Delivered</div>
+        <ul>
+          <li>Downstream systems access curated data</li>
+          <li>AI assistants can consume information</li>
+          <li>Rich querying without database access</li>
+        </ul>
+      </div>
+    </section>
+    <section id="data-model">
+      <h2>Data Model</h2>
+      <h3>Collections in MongoDB</h3>
+      <pre class="ascii-diagram">Topics
+├── _id: ObjectId
+├── name: String (display name)
+├── keywords: Array[String]
+├── language: String (en, pt, etc.)
+├── region: String (US, EU, etc.)
+├── updateFrequency: String (6h, daily, weekly)
+├── lastSearchTime: Date
+├── lastSuccessTime: Date
+├── active: Boolean
+└── timestamps: createdAt, updatedAt
+
+Articles
+├── _id: ObjectId
+├── title: String
+├── url: String (original source)
+├── urlHash: String (SHA256)
+├── contentHash: String (SHA256)
+├── snippet: String (summary)
+├── publishedDate: Date
+├── source: String (domain)
+├── topicIds: Array[ObjectId] (many-to-many)
+├── relevanceScore: Number (0.0-1.0)
+├── tags: Array[String]
+├── metadata: { author, imageUrl, language }
+└── timestamps: discoveredAt, createdAt
+
+ProcessingLogs
+├── _id: ObjectId
+├── topicId: ObjectId
+├── executionTime: Date
+├── durationMs: Number
+├── articlesFound: Number
+├── articlesPersisted: Number
+├── articlesDeduped: Number
+├── status: String (SUCCESS, FAILED, PARTIAL)
+└── errorMessage: String (if failed)</pre>
+    </section>
+
+    <section id="tech-stack">
+      <h2>Technology Stack Summary</h2>
+      <table>
+        <thead><tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>Orchestration</td><td>Quartz Scheduler</td><td>Automate search frequency</td></tr>
+          <tr><td>API Framework</td><td>Quarkus</td><td>Fast, lightweight REST APIs</td></tr>
+          <tr><td>Database</td><td>MongoDB</td><td>Flexible schema, native JSON</td></tr>
+          <tr><td>Search Provider</td><td>Serper.dev</td><td>Professional search API</td></tr>
+          <tr><td>Resilience</td><td>Resilience4j</td><td>Retry, circuit breaker, timeout</td></tr>
+          <tr><td>Similarity</td><td>Apache Commons Math</td><td>TF-IDF algorithms</td></tr>
+          <tr><td>Bloom Filters</td><td>Guava</td><td>Probabilistic deduplication</td></tr>
+          <tr><td>Caching</td><td>Redis (optional)</td><td>Performance optimization</td></tr>
+          <tr><td>Secrets</td><td>Kubernetes Secrets/Vault</td><td>API key management</td></tr>
+          <tr><td>Monitoring</td><td>Prometheus + Grafana</td><td>Metrics and alerting</td></tr>
+          <tr><td>Logging</td><td>SLF4J + ELK</td><td>Structured logs</td></tr>
+        </tbody>
+      </table>
     </section>
 
     <section id="history">
@@ -626,15 +842,15 @@ flowchart LR
       <table>
         <thead><tr><th>Version</th><th>Date</th><th>Changes</th></tr></thead>
         <tbody>
-          <tr><td>1.0</td><td>2026-09-23</td><td>Initial version</td></tr>
-          <tr><td>1.1</td><td>2026-09-23</td><td>Corrected grammar and terminology inconsistencies; added performance characteristics, expanded governance section, added limitations and next steps</td></tr>
+          <tr><td>1.0</td><td>2026-09-23</td><td>Initial published overview (on-demand search API architecture)</td></tr>
+          <tr><td>1.1</td><td>2026-09-23</td><td>Corrected grammar and terminology; added performance characteristics, expanded governance, limitations, and next steps</td></tr>
+          <tr><td>2.0</td><td>2026-10-02</td><td>Replaced with the updated platform architecture: continuous article monitoring and deduplication (five-module design, data model, technology stack). Corrected the connector alignment in the Core Components diagram.</td></tr>
         </tbody>
       </table>
     </section>
 
     <footer class="doc-footer">
-      <span>Internet Search API — Architecture Overview</span>
-      <span><a href="index-pt.html">Ver versao em portugues</a></span>
+      <span>Internet Article Search Platform — Global Architecture &amp; Overview</span>
     </footer>
 
   </div>
